@@ -5,7 +5,7 @@
   "buildCommand": "npm run build -w web",
   "outputDirectory": "web/dist",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://uilwypddrfxmmehemxei.supabase.co/functions/v1/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://uilwypddrfxmmehemxei.supabase.co/functions/v1/api/:path*?forceFunctionRegion=ap-northeast-2" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
