@@ -21,20 +21,38 @@ function originOf(req: Request) {
   return null;
 }
 
+/** Record the time since the previous lap under `name` (sent as a Server-Timing header). */
+function lap(res: Response, name: string) {
+  const now = performance.now();
+  (res.locals.timing as [string, number][]).push([name, now - res.locals.mark]);
+  res.locals.mark = now;
+}
+
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', true);
 
-  app.use((req, _res, next) => {
+  app.use((req, res, next) => {
     if (!config.publicUrlFixed) { const o = originOf(req); if (o) config.publicUrl = o; }
+    // Server-Timing: `up` is how long this process had been running when the request arrived.
+    res.locals.timing = [['up', performance.now()]];
+    res.locals.mark = performance.now();
     next();
   });
-  app.use((_req, _res, next) => { bootstrap().then(() => next(), next); });
+  app.use((_req, res, next) => { bootstrap().then(() => { lap(res, 'init'); next(); }, next); });
   // Live updates queued by a handler go out before its response.
   app.use((_req, res, next) => {
     const send = res.send.bind(res);
-    res.send = ((body?: unknown) => { flush().finally(() => send(body)); return res; }) as typeof res.send;
+    res.send = ((body?: unknown) => {
+      lap(res, 'handler');
+      flush().finally(() => {
+        lap(res, 'publish');
+        if (!res.headersSent) res.setHeader('Server-Timing', (res.locals.timing as [string, number][]).map(([k, v]) => `${k};dur=${v.toFixed(0)}`).join(', '));
+        send(body);
+      });
+      return res;
+    }) as typeof res.send;
     next();
   });
 
@@ -43,6 +61,7 @@ export function createApp() {
   app.use((req, res, next) => (req.method === 'POST' && req.path === '/api/admin/notices' ? jsonLarge : jsonSmall)(req, res, next));
   app.use(cookieParser());
   app.use(loadUser);
+  app.use((_req, res, next) => { lap(res, 'session'); next(); });
 
   app.get('/api/health', (_req, res) => { res.json({ ok: true }); });
   app.use('/api', core, gate, member, admin, notices);

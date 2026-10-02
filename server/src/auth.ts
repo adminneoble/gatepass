@@ -5,7 +5,7 @@ import { randomDigits, randomToken, sha256 } from './lib/crypto.js';
 import { HttpError, bad } from './lib/errors.js';
 import { nowIso } from './lib/time.js';
 import { sendSms } from './lib/sms.js';
-import { personById, society, type Person } from './domain.js';
+import { society, type Person } from './domain.js';
 
 export type Role = 'admin' | 'security' | 'member';
 export type User = Person & { roles: Role[] };
@@ -81,10 +81,15 @@ export async function endSession(req: Request, res: Response) {
 export async function loadUser(req: Request, res: Response, next: NextFunction) {
   const t = req.cookies?.[COOKIE];
   if (t) {
-    const s = await one<{ person_id: number }>('SELECT person_id FROM sessions WHERE token_hash = ?', sha256(t));
-    const p = s && await personById(s.person_id);
-    if (p) {
-      req.user = { ...p, roles: await rolesOf(p.id) };
+    // One round trip: person plus roles (same rules as rolesOf).
+    const u = await one<Person & { staff: Role[]; member: boolean }>(
+      `SELECT p.id, p.name, p.mobile,
+              ARRAY(SELECT role FROM staff WHERE person_id = p.id) AS staff,
+              EXISTS (SELECT 1 FROM units WHERE owner_id = p.id OR tenant_id = p.id) AS member
+       FROM sessions s JOIN people p ON p.id = s.person_id WHERE s.token_hash = ?`, sha256(t));
+    if (u) {
+      const { staff, member, ...p } = u;
+      req.user = { ...p, roles: [...staff, ...(member ? (['member'] as const) : [])] };
       setCookie(res, t); // rolling renewal
     }
   }

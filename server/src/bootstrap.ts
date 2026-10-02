@@ -21,5 +21,14 @@ export async function ensureSeeded() {
 }
 
 let ready: Promise<void> | null = null;
-/** Run once per process before serving requests. */
-export const bootstrap = () => (ready ??= (async () => { await loadSecret(); await ensureSeeded(); })().catch(err => { ready = null; throw err; }));
+/**
+ * Run once per process before serving requests. On Supabase every cold worker pays for this, so the
+ * usual case (secret stored, society seeded) is a single round trip.
+ */
+export const bootstrap = () => (ready ??= (async () => {
+  const s = (await one<{ secret: string | null; seeded: boolean }>(
+    "SELECT (SELECT value FROM app_settings WHERE key = 'secret') AS secret, EXISTS (SELECT 1 FROM society WHERE id = 1) AS seeded"))!;
+  if (!config.secret && s.secret) config.secret = s.secret;
+  await loadSecret();
+  if (!s.seeded) await ensureSeeded();
+})().catch(err => { ready = null; throw err; }));
