@@ -1,9 +1,12 @@
-import { rmSync } from 'node:fs';
-import { config } from '../config.js';
+import { all, run, tx } from './db.js';
+import { seed } from './seed.js';
 
-for (const f of [config.dbFile, config.dbFile + '-wal', config.dbFile + '-shm']) rmSync(f, { force: true });
-const { migrate } = await import('./db.js');
-const { seed } = await import('./seed.js');
-migrate();
-seed();
-console.log(`Reset ${config.dbFile} with demo data.`);
+/** Wipe every table and re-seed the demo society. Keeps app_settings (the signing secret). */
+export async function resetDemo() {
+  await tx(async () => {
+    const tables = (await all<{ tablename: string }>(
+      "SELECT tablename FROM pg_tables WHERE schemaname = current_schema() AND tablename <> 'app_settings'")).map(t => `"${t.tablename}"`);
+    await run(`TRUNCATE ${tables.join(', ')} RESTART IDENTITY CASCADE`);
+    await seed();
+  });
+}

@@ -1,3 +1,6 @@
+-- Gatepass schema for Supabase. Generated from server/src/db/schema.sql plus the lockdown below.
+-- The API (Edge Function `api`) connects as the database owner; browsers never query tables directly.
+
 -- Gatepass schema (Postgres). Timestamps are ISO-8601 UTC strings; `day` columns are
 -- the society-local calendar date (YYYY-MM-DD) used for "today" and activity ranges.
 -- Flags are 0/1 integers. Idempotent: safe to run on every start.
@@ -208,3 +211,16 @@ CREATE TABLE IF NOT EXISTS notice_files (
   size      INTEGER NOT NULL,
   data      BYTEA   NOT NULL
 );
+
+-- Lock every Gatepass table away from the Data API: RLS on with no policies, and no grants
+-- for the browser roles. Only the Edge Function (table owner) can read or write.
+DO $$
+DECLARE t text;
+BEGIN
+  FOREACH t IN ARRAY ARRAY['society', 'app_settings', 'people', 'staff', 'units', 'passes', 'visits', 'tenant_requests',
+    'alerts', 'events', 'notifications', 'otps', 'sessions', 'sms_outbox', 'notices', 'notice_recipients', 'notice_files']
+  LOOP
+    EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t);
+    EXECUTE format('REVOKE ALL ON public.%I FROM anon, authenticated', t);
+  END LOOP;
+END $$;

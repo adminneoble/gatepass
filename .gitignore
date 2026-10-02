@@ -4,3 +4,6 @@ dist
 *.db-*
 .env
 .DS_Store
+.pglite
+.vercel
+supabase/.temp

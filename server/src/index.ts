@@ -1,11 +1,22 @@
 import { config } from './config.js';
-import { migrate, one } from './db/db.js';
-import { seed } from './db/seed.js';
+import { migrate, setDriver } from './db/db.js';
 import { createApp } from './app.js';
+import { bootstrap } from './bootstrap.js';
+import { setPublisher } from './lib/realtime.js';
 
-migrate();
-if (!one('SELECT 1 FROM society WHERE id = 1')) {
-  seed();
-  console.log('Seeded demo society "Palm Grove Residency".');
+// Local Node server. With DATABASE_URL it talks to Supabase (including live updates);
+// without it, an on-disk PGlite database in server/.pglite (no live updates).
+if (config.databaseUrl) {
+  const { pgDriver } = await import('./db/pg.js');
+  const { realtimeSend } = await import('./lib/supabase.js');
+  setDriver(pgDriver(config.databaseUrl));
+  setPublisher(realtimeSend);
+} else {
+  const { pgliteDriver } = await import('./db/pglite.js');
+  setDriver(await pgliteDriver(config.pgliteDir));
+  await migrate();
 }
-createApp().listen(config.port, () => console.log(`Gatepass API on http://localhost:${config.port}`));
+if (!config.secret && !config.isProd) config.secret = 'dev-only-gatepass-secret';
+await bootstrap();
+
+createApp().listen(config.port, () => console.log(`Gatepass API on http://localhost:${config.port} (${config.databaseUrl ? 'Supabase' : 'PGlite'})`));

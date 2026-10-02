@@ -1,27 +1,23 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import type { Server } from 'node:http';
-
-const dir = mkdtempSync(join(tmpdir(), 'gatepass-test-'));
-process.env.DATABASE_FILE = join(dir, 'test.db');
 
 let server: Server;
 let base = '';
 
 before(async () => {
-  const { migrate } = await import('./db/db.js');
-  const { seed } = await import('./db/seed.js');
+  const { config } = await import('./config.js');
+  const { migrate, setDriver } = await import('./db/db.js');
+  const { pgliteDriver } = await import('./db/pglite.js');
   const { createApp } = await import('./app.js');
-  migrate();
-  seed();
+  config.secret = 'test-secret';
+  setDriver(await pgliteDriver());   // in-memory Postgres
+  await migrate();
   await new Promise<void>(r => { server = createApp().listen(0, () => r()); });
   const addr = server.address();
   base = `http://localhost:${typeof addr === 'object' && addr ? addr.port : 0}/api`;
 });
-after(() => { server?.close(); rmSync(dir, { recursive: true, force: true }); });
+after(() => { server?.close(); });
 
 /** A client with its own cookie jar. */
 function client() {
@@ -362,4 +358,44 @@ test('notice attachments: PDF/JPG/PNG only, ≤5 MB, visible to recipients and a
     assert.equal(r.status, ok ? 200 : 404);
     if (ok) assert.equal(r.headers.get('content-type'), 'application/pdf');
   }
+});
+
+test('live updates are published to the channels /auth/me hands out', async () => {
+  const { setPublisher } = await import('./lib/realtime.js');
+  const sent: { topic: string; event: string; payload: any }[] = [];
+  setPublisher(async m => { sent.push(...m); });
+  try {
+    const me = (await ananya.get('/auth/me')).data;
+    const gateMe = (await guard.get('/auth/me')).data;
+    assert.ok(me.live.all && me.live.me && me.live.me !== gateMe.live.me);
+    assert.equal(me.live.all, gateMe.live.all);
+    assert.equal(gateMe.live.roles.length, 1);
+    const r = await guard.post('/visits', { name: 'Live Test', mobile: '9000000099', unitId: 'B-402', purpose: 'Guest' });
+    assert.equal(r.status, 201);
+    assert.ok(sent.some(m => m.topic === me.live.all && m.event === 'invalidate' && m.payload.includes('visits')));
+    // The banner goes to the unit's recipients' personal channels, never the shared one.
+    const banner = sent.find(m => m.event === 'notify' && /Live Test/.test(m.payload.text));
+    assert.ok(banner && banner.topic !== me.live.all && banner.topic.startsWith('gp-'));
+    sent.length = 0;
+    // B-402's tenant (added by an earlier test) receives its requests.
+    const { channelsFor } = await import('./lib/realtime.js');
+    const { personByMobile } = await import('./domain.js');
+    assert.equal(banner.topic, channelsFor((await personByMobile('9000000005'))!.id, []).me);
+    await adminC.patch('/admin/units/B-402', { owner: { name: 'Ananya Rao', mobile: '9811100001' }, tenant: { name: 'Tenant Five', mobile: '9000000005' }, notify: 'Both' });
+    await ananya.post(`/visits/${r.data.visit.id}/decision`, { decision: 'approved' });
+    assert.ok(sent.some(m => m.topic === gateMe.live.roles[0] && m.event === 'notify'));
+  } finally { setPublisher(async () => {}); }
+});
+
+test('demo reset restores the demo society and keeps the admin signed in', async () => {
+  assert.equal((await ananya.post('/admin/demo/reset')).status, 403);
+  await adminC.patch('/society', { name: 'Renamed Society' });
+  const r = await adminC.post('/admin/demo/reset');
+  assert.equal(r.status, 200, JSON.stringify(r.data));
+  assert.equal(r.data.signedOut, false);
+  const me = (await adminC.get('/auth/me')).data;
+  assert.equal(me.user?.mobile, '9800000001');
+  assert.equal(me.society.name, 'Palm Grove Residency');
+  assert.equal((await adminC.get('/admin/units')).data.length, 6);
+  assert.equal((await guard.get('/auth/me')).data.user, null);   // everyone else signed out
 });

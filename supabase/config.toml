@@ -1,0 +1,7 @@
+# Supabase project settings used by the CLI (`supabase functions deploy api`).
+project_id = "uilwypddrfxmmehemxei"
+
+[functions.api]
+# The API does its own auth (session cookie), so the gateway must not demand a Supabase JWT.
+verify_jwt = false
+entrypoint = "./functions/api/index.js"

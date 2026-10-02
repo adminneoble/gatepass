@@ -2,7 +2,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api';
 import type { Brand, Society, User } from './types';
 
-type Me = { user: User | null; society: Brand };
+/** Realtime channel names for the signed-in user (see server lib/realtime.ts). */
+export type LiveChannels = { all: string; me: string; roles: string[] };
+type Me = { user: User | null; society: Brand; live?: LiveChannels };
 
 export function useMe() {
   return useQuery({ queryKey: ['me'], queryFn: () => api.get<Me>('/auth/me'), staleTime: 60_000 });

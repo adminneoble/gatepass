@@ -3,7 +3,7 @@ import { all, one, run } from '../db/db.js';
 import { checkOtp, endSession, issueOtp, loginSms, requireRole, rolesOf, startSession } from '../auth.js';
 import { personByMobile, society, unitsOf } from '../domain.js';
 import { HttpError, notFound } from '../lib/errors.js';
-import { invalidate, subscribe } from '../lib/realtime.js';
+import { channelsFor, invalidate } from '../lib/realtime.js';
 import { readPassToken } from '../lib/crypto.js';
 import { dataUrlImage, mobile, name, parse, z } from '../lib/validate.js';
 import { config } from '../config.js';
@@ -13,48 +13,47 @@ import { passView, type PassRow } from '../views.js';
 export const core = Router();
 
 const initials = (n: string) => n.split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase();
-const brand = () => { const s = society(); return { name: s.name, logo: s.logo, initials: initials(s.name) }; };
+const brand = async () => { const s = await society(); return { name: s.name, logo: s.logo, initials: initials(s.name) }; };
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
 
-core.post('/auth/otp', (req, res) => {
+core.post('/auth/otp', async (req, res) => {
   const { mobile: m } = parse(z.object({ mobile }), req.body);
-  const p = personByMobile(m);
-  if (!p || rolesOf(p.id).length === 0) throw new HttpError(404, `This number isn't registered with ${society().name}. Ask your society admin to add you.`);
-  const code = issueOtp(m, 'login', loginSms);
-  res.json({ sent: true, ...(config.isProd ? {} : { devCode: code }) });
+  const p = await personByMobile(m);
+  if (!p || (await rolesOf(p.id)).length === 0) throw new HttpError(404, `This number isn't registered with ${(await society()).name}. Ask your society admin to add you.`);
+  const code = await issueOtp(m, 'login', loginSms);
+  res.json({ sent: true, ...(config.demo ? { devCode: code } : {}) });
 });
 
-core.post('/auth/verify', (req, res) => {
+core.post('/auth/verify', async (req, res) => {
   const { mobile: m, code } = parse(z.object({ mobile, code: z.string().regex(/^\d{4}$/, 'Enter the 4-digit code.') }), req.body);
-  checkOtp(m, 'login', code);
-  const p = personByMobile(m)!;
-  startSession(res, p.id);
-  res.json({ user: { ...p, roles: rolesOf(p.id) } });
+  await checkOtp(m, 'login', code);
+  const p = (await personByMobile(m))!;
+  await startSession(res, p.id);
+  res.json({ user: { ...p, roles: await rolesOf(p.id) } });
 });
 
-core.post('/auth/logout', (req, res) => { endSession(req, res); res.json({ ok: true }); });
+core.post('/auth/logout', async (req, res) => { await endSession(req, res); res.json({ ok: true }); });
 
-core.get('/auth/me', (req, res) => {
-  if (!req.user) return res.json({ user: null, society: brand() });
-  res.json({ user: { ...req.user, units: unitsOf(req.user.id).map(u => u.id) }, society: brand() });
+core.get('/auth/me', async (req, res) => {
+  if (!req.user) return res.json({ user: null, society: await brand() });
+  const u = req.user;
+  res.json({ user: { ...u, units: (await unitsOf(u.id)).map(x => x.id) }, society: await brand(), live: channelsFor(u.id, u.roles) });
 });
-
-core.get('/stream', requireRole(), (req, res) => subscribe(res, req.user!.id, req.user!.roles));
 
 // ── Society ──────────────────────────────────────────────────────────────────
 
-core.get('/society/brand', (_req, res) => res.json(brand()));
+core.get('/society/brand', async (_req, res) => { res.json(await brand()); });
 
-core.get('/society', requireRole(), (_req, res) => {
-  const s = society();
+core.get('/society', requireRole(), async (_req, res) => {
+  const s = await society();
   res.json({
-    ...brand(), gatePhone: s.gate_phone, supervisorName: s.supervisor_name, supervisorPhone: s.supervisor_phone,
+    ...(await brand()), gatePhone: s.gate_phone, supervisorName: s.supervisor_name, supervisorPhone: s.supervisor_phone,
     otpRequired: !!s.otp_required, autoSharePass: !!s.auto_share_pass, passValidity: s.pass_validity,
   });
 });
 
-core.patch('/society', requireRole('admin'), (req, res) => {
+core.patch('/society', requireRole('admin'), async (req, res) => {
   const b = parse(z.object({
     name: name.optional(),
     logo: dataUrlImage.nullable().optional(),
@@ -72,28 +71,27 @@ core.patch('/society', requireRole('admin'), (req, res) => {
     pass_validity: b.passValidity,
   };
   const set = Object.entries(cols).filter(([, v]) => v !== undefined);
-  if (set.length) run(`UPDATE society SET ${set.map(([k]) => k + ' = ?').join(', ')}, updated_at = ? WHERE id = 1`, ...set.map(([, v]) => v), nowIso());
+  if (set.length) await run(`UPDATE society SET ${set.map(([k]) => k + ' = ?').join(', ')}, updated_at = ? WHERE id = 1`, ...set.map(([, v]) => v), nowIso());
   invalidate('society');
   res.json({ ok: true });
 });
 
 // ── Visitor pass page (public, token-gated) ──────────────────────────────────
 
-core.get('/p/:token', (req, res) => {
+core.get('/p/:token', async (req, res) => {
   const id = readPassToken(req.params.token);
-  const p = id && one<PassRow>('SELECT * FROM passes WHERE id = ?', id);
+  const p = id && await one<PassRow>('SELECT * FROM passes WHERE id = ?', id);
   if (!p) throw notFound('This pass link is not valid.');
   const v = passView(p);
-  res.json({ society: brand(), pass: { name: v.name, code: v.code, unitId: v.unitId, purpose: v.purpose, validLabel: v.validLabel, state: v.state, token: v.token } });
+  res.json({ society: await brand(), pass: { name: v.name, code: v.code, unitId: v.unitId, purpose: v.purpose, validLabel: v.validLabel, state: v.state, token: v.token } });
 });
 
 // ── Development SMS inbox (stands in for the visitor's phone) ────────────────
 
-if (!config.isProd) {
-  core.get('/dev/sms', (req, res) => {
-    const to = typeof req.query.mobile === 'string' ? req.query.mobile : '';
-    const threads = all<{ to_mobile: string; n: number; last: string }>('SELECT to_mobile, COUNT(*) n, MAX(created_at) last FROM sms_outbox GROUP BY to_mobile ORDER BY last DESC');
-    const messages = to ? all('SELECT id, to_mobile AS "to", body, link, created_at AS at FROM sms_outbox WHERE to_mobile = ? ORDER BY id', to) : [];
-    res.json({ sender: config.smsSender, threads, messages });
-  });
-}
+core.get('/dev/sms', async (req, res) => {
+  if (!config.demo) throw notFound();
+  const to = typeof req.query.mobile === 'string' ? req.query.mobile : '';
+  const threads = await all<{ to_mobile: string; n: number; last: string }>('SELECT to_mobile, COUNT(*) AS n, MAX(created_at) AS last FROM sms_outbox GROUP BY to_mobile ORDER BY last DESC');
+  const messages = to ? await all('SELECT id, to_mobile AS "to", body, link, created_at AS at FROM sms_outbox WHERE to_mobile = ? ORDER BY id', to) : [];
+  res.json({ sender: config.smsSender, threads, messages });
+});

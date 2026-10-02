@@ -1,4 +1,4 @@
-import { run } from '../db/db.js';
+import { insert, run } from '../db/db.js';
 import { nowIso } from './time.js';
 import { config } from '../config.js';
 import { invalidate } from './realtime.js';
@@ -16,11 +16,11 @@ const consoleProvider: SmsProvider = {
 let provider: SmsProvider = consoleProvider;
 export const setSmsProvider = (p: SmsProvider) => { provider = p; };
 
-export function sendSms(to: string, body: string, link?: string) {
+export async function sendSms(to: string, body: string, link?: string) {
   const full = link ? `${body} ${link}` : body;
-  const id = run('INSERT INTO sms_outbox (to_mobile, body, link, created_at) VALUES (?, ?, ?, ?)', to, body, link ?? null, nowIso()).lastInsertRowid;
-  provider.deliver(to, full)
-    .then(() => run("UPDATE sms_outbox SET status = 'sent' WHERE id = ?", id))
-    .catch(err => { console.error('SMS delivery failed', err); run("UPDATE sms_outbox SET status = 'failed' WHERE id = ?", id); });
+  const id = await insert('INSERT INTO sms_outbox (to_mobile, body, link, created_at) VALUES (?, ?, ?, ?)', to, body, link ?? null, nowIso());
+  let status = 'sent';
+  try { await provider.deliver(to, full); } catch (err) { console.error('SMS delivery failed', err); status = 'failed'; }
+  await run('UPDATE sms_outbox SET status = ? WHERE id = ?', status, id);
   invalidate('sms');
 }

@@ -86,7 +86,7 @@ export default function Login() {
               <CodeInput length={4} label="Sign-in code" value={code} autoFocus state={error ? 'error' : undefined}
                 onChange={v => { setCode(v); setError(null); if (v.length === 4) verify(v); }} />
               {error && <Notice tone="danger">{error}</Notice>}
-              {devCode && <Notice icon={MessageSquareText}>Development mode: your code is <strong className="num">{devCode}</strong>.</Notice>}
+              {devCode && <Notice icon={MessageSquareText}>Demo mode: your code is <strong className="num">{devCode}</strong>.</Notice>}
               <Button variant="primary" size="lg" block type="submit" disabled={code.length !== 4} loading={busy} icon={ShieldCheck}>Verify and sign in</Button>
               <div className="row between">
                 <Button variant="ghost" size="sm" type="button" onClick={() => { setStep('mobile'); setError(null); }}>Change number</Button>

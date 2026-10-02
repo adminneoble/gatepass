@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Clock, ImagePlus, MessageSquareText, ShieldCheck, Trash2 } from 'lucide-react';
+import { Clock, ImagePlus, MessageSquareText, RotateCcw, ShieldCheck, Trash2 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useFeedback } from '../../lib/feedback';
 import { useSociety } from '../../lib/session';
@@ -48,8 +48,40 @@ export default function Settings() {
             <Seg label="Pass validity" options={['4 hours', '24 hours', '3 days'] as const} value={s.passValidity} onChange={v => save.mutate({ passValidity: v })} block />
           </div>
         </section>
+        <DemoReset />
       </div>
     </div>
+  );
+}
+
+/** Demo prototype: restore the sample society so the next demo starts clean. */
+function DemoReset() {
+  const qc = useQueryClient();
+  const { toast, fail } = useFeedback();
+  const [armed, setArmed] = useState(false);
+  useEffect(() => { if (!armed) return; const t = setTimeout(() => setArmed(false), 5000); return () => clearTimeout(t); }, [armed]);
+  const reset = useMutation({
+    mutationFn: () => api.post<{ message: string; signedOut: boolean }>('/admin/demo/reset'),
+    onSuccess: r => { setArmed(false); if (r.signedOut) { location.href = '/login'; return; } qc.invalidateQueries(); toast(r.message); },
+    onError: e => { setArmed(false); fail(e); },
+  });
+  return (
+    <section className="card">
+      <span className="kicker">Demo</span>
+      <div className="row row-top" style={css({ '--gap': '12px' })}>
+        <div className="icon-tile toned tone-amber"><RotateCcw size={18} /></div>
+        <div className="stack grow" style={css({ '--gap': '2px' })}>
+          <span className="row-title">Reset demo data</span>
+          <span className="row-sub">Restores Palm Grove Residency with its sample units, visitors and passes. Everything added since is removed and other devices are signed out.</span>
+        </div>
+      </div>
+      <div className="row" style={css({ '--gap': '8px' })}>
+        <Button variant={armed ? 'danger' : 'secondary'} icon={RotateCcw} loading={reset.isPending} onClick={() => (armed ? reset.mutate() : setArmed(true))}>
+          {armed ? 'Tap again to reset' : 'Reset demo data'}
+        </Button>
+        {armed && <Button variant="ghost" onClick={() => setArmed(false)}>Cancel</Button>}
+      </div>
+    </section>
   );
 }
 
