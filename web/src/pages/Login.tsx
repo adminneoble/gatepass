@@ -11,7 +11,7 @@ import { Button, CodeInput, LogoTile, MobileField, Notice, css } from '../ui';
 const DEMO = [
   ['Security · Gate desk', '9800012345'],
   ['Resident · Ananya Rao (owner B-402, C-110)', '9811100001'],
-  ['Resident · Vikas Iyer (tenant C-110)', '9811100002'],
+  ['Resident · Mister Tenant (tenant C-110)', '9876987698'],
   ['Admin · Kavita Desai', '9800000001'],
 ] as const;
 
