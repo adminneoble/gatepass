@@ -28,7 +28,7 @@ export function useLive(enabled: boolean, source: string) {
     let connected = false;
     const channels = channelKey.split(',').map(name => sb.channel(name)
       .on('broadcast', { event: 'invalidate' }, ({ payload }) => {
-        for (const topic of payload as string[]) qc.invalidateQueries({ queryKey: [topic] });
+        for (const topic of (payload as { topics: string[] }).topics) qc.invalidateQueries({ queryKey: [topic] });
       })
       .on('broadcast', { event: 'notify' }, ({ payload }) => {
         const n = payload as { text: string; tone?: 'info' | 'alert'; link?: string };
