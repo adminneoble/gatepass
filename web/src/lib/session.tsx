@@ -4,7 +4,8 @@ import type { Brand, Society, User } from './types';
 
 /** Realtime channel names for the signed-in user (see server lib/realtime.ts). */
 export type LiveChannels = { all: string; me: string; roles: string[] };
-type Me = { user: User | null; society: Brand; live?: LiveChannels };
+/** `demo`: the server runs as a demo prototype (on-screen OTPs, SMS inbox, demo accounts). */
+type Me = { user: User | null; society: Brand; live?: LiveChannels; demo?: boolean };
 
 export function useMe() {
   return useQuery({ queryKey: ['me'], queryFn: () => api.get<Me>('/auth/me'), staleTime: 60_000 });

@@ -36,9 +36,9 @@ core.post('/auth/verify', async (req, res) => {
 core.post('/auth/logout', async (req, res) => { await endSession(req, res); res.json({ ok: true }); });
 
 core.get('/auth/me', async (req, res) => {
-  if (!req.user) return res.json({ user: null, society: await brand() });
+  if (!req.user) return res.json({ user: null, society: await brand(), demo: config.demo });
   const u = req.user;
-  res.json({ user: { ...u, units: (await unitsOf(u.id)).map(x => x.id) }, society: await brand(), live: channelsFor(u.id, u.roles) });
+  res.json({ user: { ...u, units: (await unitsOf(u.id)).map(x => x.id) }, society: await brand(), live: channelsFor(u.id, u.roles), demo: config.demo });
 });
 
 // ── Society ──────────────────────────────────────────────────────────────────

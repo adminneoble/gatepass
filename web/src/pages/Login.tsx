@@ -95,7 +95,7 @@ export default function Login() {
             </form>
           )}
 
-          {import.meta.env.DEV && step === 'mobile' && (
+          {me.data?.demo && step === 'mobile' && (
             <div className="stack" style={css({ '--gap': '8px' })}>
               <span className="kicker">Demo accounts</span>
               <div className="list">
