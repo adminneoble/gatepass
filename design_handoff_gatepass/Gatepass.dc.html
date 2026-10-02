@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/modernist-a2f77904-3d7d-4bce-b097-8ef716759661/styles.css">
+<script src="_ds/modernist-a2f77904-3d7d-4bce-b097-8ef716759661/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-bg)} a{color:var(--color-text)} a:hover{color:var(--color-neutral-700)}
+.btn-primary{background:var(--color-text);color:var(--color-bg)} .btn-primary:hover{background:var(--color-neutral-800)} .btn-primary:active{background:var(--color-neutral-900)}
+.btn-ghost{color:var(--color-text)} .btn-ghost:hover{background:color-mix(in srgb,var(--color-text) 8%,transparent)} .btn-ghost:active{background:color-mix(in srgb,var(--color-text) 14%,transparent)}
+.card-kicker{color:var(--color-neutral-700)} .tag-accent{background:var(--color-text);color:var(--color-bg)} .tag-outline{border:1px solid var(--color-text);color:var(--color-text)}
+.seg-opt:has(input:checked){background:var(--color-text)} .input:focus-visible{border-color:var(--color-text)} :focus-visible{outline-color:var(--color-text)}</style>
+</helmet>
+<div style="padding:48px;min-width:1700px;display:flex;flex-direction:column;gap:32px">
+  <div style="display:flex;align-items:flex-end;gap:32px;padding-bottom:20px;border-bottom:2px solid var(--color-divider)">
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+      <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-700);font-weight:600">Society visitor management</div>
+      <div style="display:flex;align-items:center;gap:14px"><div style="width:52px;height:52px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z M9 12l2 2 4-4"></path></svg></div><h1 style="margin:0">Gatepass</h1></div>
+      <p style="margin:0;max-width:760px;text-wrap:pretty">Four roles on one live state. Log a walk-in at the gate and approve it on the member phone, pre-approve a guest and verify the code or QR at security, or raise an alert from a member to the gate.</p>
+    </div>
+    <button class="btn btn-secondary" onClick="{{ reset }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8 M3 3v5h5"></path></svg>Reset demo</button>
+  </div>
+
+  <div style="display:flex;gap:40px;align-items:flex-start">
+
+    <!-- 01 VISITOR -->
+    <div style="display:flex;flex-direction:column;gap:12px;width:375px">
+      <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700">01 — Visitor · no app</div><div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Gets an SMS; the link opens the pass in the browser.</div></div>
+      <div data-screen-label="Visitor" style="width:375px;height:780px;border:2px solid var(--color-text);background:var(--color-bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)">
+        <div style="height:34px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 20px;font-size:12px;font-weight:600"><span>9:41</span><span style="display:flex;align-items:center;gap:6px"><svg width="17" height="11" viewBox="0 0 17 11" style="display:block"><rect x="0" y="7" width="3" height="4" fill="currentColor"></rect><rect x="4.5" y="5" width="3" height="6" fill="currentColor"></rect><rect x="9" y="2.5" width="3" height="8.5" fill="currentColor"></rect><rect x="13.5" y="0" width="3" height="11" fill="currentColor"></rect></svg><span style="font-size:11px">5G</span><svg width="25" height="12" viewBox="0 0 25 12" style="display:block"><rect x="0.75" y="0.75" width="20.5" height="10.5" fill="none" stroke="currentColor" stroke-width="1.5"></rect><rect x="3" y="3" width="13" height="6" fill="currentColor"></rect><rect x="22.5" y="4" width="2" height="4" fill="currentColor"></rect></svg></span></div>
+        <sc-if value="{{ visOnList }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:none;display:flex;align-items:center;gap:12px;padding:10px 16px 12px;border-bottom:2px solid var(--color-divider)"><div style="width:40px;height:40px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div style="display:flex;flex-direction:column"><span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-700);font-weight:600">Messages · {{ visMobileFmt }}</span><span style="font-weight:800;font-size:18px">PG-GATE</span></div></div>
+          <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ visMsgs }}" as="m" hint-placeholder-count="1">
+              <div style="display:flex;flex-direction:column;gap:4px;max-width:290px">
+                <div style="background:var(--color-surface);padding:10px 12px;font-size:14px;display:flex;flex-direction:column;gap:6px">
+                  <span style="text-wrap:pretty">{{ m.text }}</span>
+                  <sc-if value="{{ m.hasLink }}"><button onClick="{{ m.open }}" style="align-self:flex-start;background:none;border:0;padding:0;font:inherit;font-size:14px;color:var(--color-text);text-decoration:underline;text-underline-offset:3px;cursor:pointer;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71 M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>{{ m.url }}</button></sc-if>
+                </div>
+                <span style="font-size:11px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ m.time }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ visOnPass }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:2px solid var(--color-divider)">
+            <button class="btn btn-ghost" onClick="{{ visBack }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="m15 18-6-6 6-6"></path></svg>Messages</button>
+            <div style="flex:1;background:var(--color-surface);padding:6px 10px;font-size:13px;overflow:hidden;white-space:nowrap;display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M5 11h14v11H5z M7 11V7a5 5 0 0 1 10 0v4"></path></svg>{{ visPassUrl }}</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="flex:1;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-700);font-weight:600">{{ socName }}</span><span class="{{ visPassTag }}">{{ visPassStatus }}</span></div>
+            <h3 style="margin:0">Entry pass for {{ visPassName }}</h3>
+            <svg viewBox="0 0 25 25" width="240" height="240" style="background:#fff;opacity:{{ visPassQrOpacity }}"><path d="{{ visPassQr }}" fill="#201e1d"></path></svg>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Entry code</span><span style="font-weight:800;font-size:40px;letter-spacing:0.1em;line-height:1.1">{{ visPassCode }}</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--color-divider)">
+              <div style="padding:10px 0;display:flex;flex-direction:column"><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent);display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2 M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2 M10 6h4 M10 10h4 M10 14h4 M10 18h4"></path></svg>Visiting</span><span style="font-weight:700">{{ visPassFlat }}</span></div>
+              <div style="padding:10px 12px;display:flex;flex-direction:column;border-left:1px solid var(--color-divider)"><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent);display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z M7 7.5a.5.5 0 1 0 1 0a.5.5 0 1 0-1 0"></path></svg>Purpose</span><span style="font-weight:700">{{ visPassPurpose }}</span></div>
+              <div style="padding:10px 0;display:flex;flex-direction:column;grid-column:span 2;border-top:1px solid var(--color-divider)"><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent);display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M12 6v6l4 2"></path></svg>Validity</span><span style="font-weight:700">{{ visPassValid }}</span></div>
+            </div>
+            <p style="margin:0;font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Show the QR at the gate reader or tell security the code.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ visSms }}">
+          <div style="position:absolute;top:40px;left:8px;right:8px;z-index:5;background:var(--color-text);color:var(--color-bg);padding:12px 14px;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-300);font-weight:600;display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>PG-GATE · now</span>
+            <span style="font-size:13px">{{ visSms }}</span>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- 02 SECURITY -->
+    <div style="display:flex;flex-direction:column;gap:12px;width:375px">
+      <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700">02 — Security</div><div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Logs walk-ins, verifies codes and QR.</div></div>
+      <div data-screen-label="Security" style="width:375px;height:780px;border:2px solid var(--color-text);background:var(--color-bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)">
+        <div style="height:34px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 20px;font-size:12px;font-weight:600"><span>9:41</span><span style="display:flex;align-items:center;gap:6px"><svg width="17" height="11" viewBox="0 0 17 11" style="display:block"><rect x="0" y="7" width="3" height="4" fill="currentColor"></rect><rect x="4.5" y="5" width="3" height="6" fill="currentColor"></rect><rect x="9" y="2.5" width="3" height="8.5" fill="currentColor"></rect><rect x="13.5" y="0" width="3" height="11" fill="currentColor"></rect></svg><span style="font-size:11px">5G</span><svg width="25" height="12" viewBox="0 0 25 12" style="display:block"><rect x="0.75" y="0.75" width="20.5" height="10.5" fill="none" stroke="currentColor" stroke-width="1.5"></rect><rect x="3" y="3" width="13" height="6" fill="currentColor"></rect><rect x="22.5" y="4" width="2" height="4" fill="currentColor"></rect></svg></span></div>
+        <div style="flex:none;display:flex;align-items:center;gap:12px;padding:10px 16px 12px;border-bottom:2px solid var(--color-divider)">
+          <div style="width:40px;height:40px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-bg);font-weight:800;font-size:14px;overflow:hidden"><sc-if value="{{ socHasLogo }}" hint-placeholder-val="{{ false }}"><div style="width:100%;height:100%;background:#fff center/contain no-repeat url({{ socLogo }})"></div></sc-if><sc-if value="{{ socNoLogo }}" hint-placeholder-val="{{ true }}">{{ socInitials }}</sc-if></div><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-700);font-weight:600">Security · Main gate</span><span style="font-weight:800;font-size:18px">{{ secTitle }}</span></div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px">
+          <sc-if value="{{ secAlertStrip }}" hint-placeholder-val="{{ false }}"><button onClick="{{ secGoHome }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--color-text);color:var(--color-bg);border:0;font:inherit;font-weight:700;font-size:13px;text-align:left;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M7 18v-6a5 5 0 1 1 10 0v6 M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z M21 12h1 M18.5 4.5 18 5 M2 12h1 M12 2v1 M4.93 4.93l.71.71 M12 12v6"></path></svg><span style="flex:1">{{ secAlertCountLabel }}</span><span>View</span></button></sc-if>
+          <sc-if value="{{ secIsHome }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">On duty · Shift 06:00–14:00</div>
+              <sc-for list="{{ secOpenAlerts }}" as="a"><div style="display:flex;flex-direction:column;gap:6px;padding:14px;background:var(--color-text);color:var(--color-bg)">
+                <div style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M7 18v-6a5 5 0 1 1 10 0v6 M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z M21 12h1 M18.5 4.5 18 5 M2 12h1 M12 2v1 M4.93 4.93l.71.71 M12 12v6"></path></svg><span style="flex:1;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-300)">Resident alert · {{ a.time }}</span><span style="font-size:11px;font-weight:700;padding:2px 8px;border:1px solid var(--color-bg)">{{ a.statusLabel }}</span></div>
+                <span style="font-weight:800;font-size:19px">{{ a.type }}</span>
+                <span style="font-size:13px">{{ a.unit }} · {{ a.name }} · {{ a.phoneFmt }}</span>
+                <sc-if value="{{ a.hasNote }}"><span style="font-size:13px;color:var(--color-neutral-300)">“{{ a.note }}”</span></sc-if>
+                <div style="display:flex;gap:8px;margin-top:6px">
+                  <a class="btn" href="{{ a.tel }}" style="background:var(--color-bg);color:var(--color-text)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a>
+                  <sc-if value="{{ a.isNew }}"><button class="btn" style="border:1px solid var(--color-bg);color:var(--color-bg)" onClick="{{ a.ack }}">Acknowledge</button></sc-if>
+                  <sc-if value="{{ a.isAck }}"><button class="btn" style="border:1px solid var(--color-bg);color:var(--color-bg)" onClick="{{ a.resolve }}">Mark resolved</button></sc-if>
+                </div>
+              </div></sc-for>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <button class="btn btn-primary" onClick="{{ secGoEntry }}" style="height:120px;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:14px;text-align:left">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M19 8v6"></path><path d="M22 11h-6"></path></svg>
+                  <span style="font-size:16px">New visitor</span>
+                </button>
+                <button class="btn btn-secondary" onClick="{{ secGoVerify }}" style="height:120px;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:14px;text-align:left;border:2px solid var(--color-text)">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><path d="M7 12h10"></path></svg>
+                  <span style="font-size:16px">Verify code or QR</span>
+                </button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--color-divider);border-bottom:2px solid var(--color-divider)">
+                <div style="padding:12px 0;display:flex;flex-direction:column;gap:2px"><span style="font-size:28px;font-weight:800;line-height:1">{{ secCountInside }}</span><span style="font-size:12px">Inside now</span></div>
+                <div style="padding:12px;display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--color-divider)"><span style="font-size:28px;font-weight:800;line-height:1;color:var(--color-neutral-700)">{{ secCountWaiting }}</span><span style="font-size:12px">At the gate</span></div>
+                <div style="padding:12px;display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--color-divider)"><span style="font-size:28px;font-weight:800;line-height:1">{{ secCountToday }}</span><span style="font-size:12px">Today</span></div>
+              </div>
+              <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent)">At the gate</div>
+              <sc-if value="{{ secNoWaiting }}"><p style="margin:0;font-size:14px;color:color-mix(in srgb,var(--color-text) 70%,transparent)">No one is waiting.</p></sc-if>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ secWaiting }}" as="v">
+                  <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--color-divider)">
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:700">{{ v.name }}</span><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ v.flat }} · {{ v.purpose }} · {{ v.time }}</span></div>
+                    <sc-if value="{{ v.canAllow }}"><button class="btn btn-primary" onClick="{{ v.allow }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4 M10 17l5-5-5-5 M15 12H3"></path></svg>Allow in</button></sc-if>
+                    <sc-if value="{{ v.isPending }}"><span class="tag tag-outline">Awaiting</span></sc-if>
+                    <sc-if value="{{ v.isDenied }}"><span class="tag tag-neutral">Denied</span></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent)">Inside now</div>
+              <sc-if value="{{ secNoInside }}"><p style="margin:0;font-size:14px;color:color-mix(in srgb,var(--color-text) 70%,transparent)">No visitors inside.</p></sc-if>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ secInside }}" as="v">
+                  <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--color-divider)">
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:700">{{ v.name }}</span><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ v.flat }} · in at {{ v.time }}</span></div>
+                    <button class="btn btn-secondary" onClick="{{ v.exit }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9"></path></svg>Mark exit</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ secIsEntry }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;gap:12px">
+                <label style="width:96px;height:96px;flex:none;border:2px dashed var(--color-divider);background:var(--color-surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;overflow:hidden;font-size:11px;font-weight:600">
+                  <input type="file" accept="image/*" capture="user" onChange="{{ onSecPhoto }}" style="display:none">
+                  <sc-if value="{{ secHasPhoto }}" hint-placeholder-val="{{ false }}"><div class="grayscale" style="width:100%;height:100%;background:center/cover no-repeat url({{ secPhoto }})"></div></sc-if>
+                  <sc-if value="{{ secNoPhoto }}" hint-placeholder-val="{{ true }}">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+                    <span>Take photo</span>
+                  </sc-if>
+                </label>
+                <div style="flex:1;display:flex;flex-direction:column;gap:10px">
+                  <div class="field"><label>Visitor name</label><input class="input" value="{{ secName }}" onChange="{{ onSecName }}" placeholder="Full name"></div>
+                  <div class="field"><label>Flat / office</label><div style="position:relative;flex:1;display:flex"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:color-mix(in srgb,var(--color-text) 65%,transparent);pointer-events:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2 M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2 M10 6h4 M10 10h4 M10 14h4 M10 18h4"></path></svg></span><input class="input" style="padding-left:34px" value="{{ secFlat }}" onChange="{{ onSecFlat }}" placeholder="Flat, office or name">
+                    <sc-if value="{{ secSuggestOpen }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:100%;left:0;width:250px;z-index:4;background:var(--color-bg);border:2px solid var(--color-text);box-shadow:var(--shadow-md);display:flex;flex-direction:column">
+                      <sc-for list="{{ secSuggest }}" as="u"><button onClick="{{ u.pick }}" style="background:none;border:0;border-bottom:1px solid var(--color-divider);padding:8px 10px;text-align:left;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:1px" style-hover="background:var(--color-surface)"><span style="font-weight:700;font-size:14px">{{ u.id }} · {{ u.type }}</span><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ u.who }}</span></button></sc-for>
+                    </div></sc-if>
+                  </div></div>
+                </div>
+              </div>
+              <sc-if value="{{ secUnitFound }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:var(--color-surface)"><span style="margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></span><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Request goes to</span><sc-for list="{{ secUnitWho }}" as="r"><span style="font-size:14px;font-weight:700">{{ r.name }} <span style="font-weight:400">· {{ r.role }} · {{ r.phone }}</span></span></sc-for></div></div></sc-if>
+              <sc-if value="{{ secUnitMissing }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:var(--color-accent-700)">Not in the directory. Check the flat or office number.</div></sc-if>
+              <div class="field"><label>Mobile number</label>
+                <div style="display:flex;gap:8px"><div style="position:relative;flex:1;display:flex"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:color-mix(in srgb,var(--color-text) 65%,transparent);pointer-events:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span><input class="input" style="padding-left:34px" inputmode="numeric" value="{{ secMobile }}" onChange="{{ onSecMobile }}" placeholder="10-digit mobile"></div>
+                  <sc-if value="{{ secShowSendOtp }}"><button class="btn btn-secondary" style="flex:none" disabled="{{ secCantSendOtp }}" onClick="{{ secSendOtp }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z M21.854 2.147l-10.94 10.939"></path></svg>{{ secSendLabel }}</button></sc-if>
+                  <sc-if value="{{ secVerified }}"><span class="tag tag-accent" style="flex:none;align-self:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 6 9 17l-5-5"></path></svg>Verified</span></sc-if>
+                </div>
+              </div>
+              <sc-if value="{{ secShowOtpInput }}">
+                <div class="field"><label>OTP from visitor's SMS</label>
+                  <div style="display:flex;gap:8px"><input class="input" inputmode="numeric" maxlength="4" value="{{ secOtpIn }}" onChange="{{ onSecOtpIn }}" placeholder="4 digits" style="letter-spacing:0.3em"><button class="btn btn-primary" style="flex:none" onClick="{{ secVerifyOtp }}">Verify</button></div>
+                </div>
+              </sc-if>
+              <div class="field"><label>Purpose of visit</label>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <sc-for list="{{ secChips }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.pick }}" style="padding:8px 12px;font:inherit;font-size:13px;font-weight:600;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;display:flex;align-items:center;gap:6px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="display:block"><path d="{{ c.icon }}"></path></svg>{{ c.label }}</button></sc-for>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-block" style="padding:14px 16px;font-size:15px" disabled="{{ secCantSubmit }}" onClick="{{ secSubmit }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>Notify resident for approval</button>
+              <sc-if value="{{ secOtpRequired }}"><div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Admin requires mobile verification before entry.</div></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ secIsVerify }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <button class="btn btn-secondary btn-block" style="padding:14px 16px;font-size:15px;margin-top:0" onClick="{{ secScan }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><path d="M7 12h10"></path></svg>
+                Scan QR / RFID pass
+              </button>
+              <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent)">Or enter the 6-digit code</div>
+              <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">
+                <sc-for list="{{ secDigits }}" as="d" hint-placeholder-count="6"><div style="height:52px;border:2px solid var(--color-divider);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;background:var(--color-surface)">{{ d.v }}</div></sc-for>
+              </div>
+              <sc-if value="{{ secResOk }}">
+                <div class="card" style="padding:14px;gap:6px;border:2px solid var(--color-text)">
+                  <div style="display:flex;align-items:center"><span class="card-kicker" style="flex:1">Pre-approved by {{ secResFlat }}</span><span class="tag tag-accent" style="gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z M9 12l2 2 4-4"></path></svg>Valid</span></div>
+                  <div class="card-title">{{ secResName }}</div>
+                  <div style="font-size:13px">{{ secResDetail }}</div>
+                  <button class="btn btn-primary btn-block" style="padding:12px 14px" onClick="{{ secAdmit }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4 M10 17l5-5-5-5 M15 12H3"></path></svg>Allow entry</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ secResBad }}"><div style="padding:12px 14px;background:var(--color-accent-100);color:var(--color-accent-800);font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M15 9l-6 6 M9 9l6 6"></path></svg>{{ secResMsg }}</div></sc-if>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                <sc-for list="{{ secKeys }}" as="k" hint-placeholder-count="12"><button class="btn btn-secondary" style="height:52px;font-size:18px;justify-content:flex-start" onClick="{{ k.press }}" aria-label="{{ k.label }}"><sc-if value="{{ k.isDel }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z M12 9l6 6 M18 9l-6 6"></path></svg></sc-if><sc-if value="{{ k.isText }}" hint-placeholder-val="{{ true }}">{{ k.label }}</sc-if></button></sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ secIsLog }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ visitsView }}" as="v">
+                <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--color-divider)">
+                  <div style="width:44px;height:44px;flex:none;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden">
+                    <sc-if value="{{ v.hasPhoto }}" hint-placeholder-val="{{ false }}"><div class="grayscale" style="width:100%;height:100%;background:center/cover no-repeat url({{ v.photo }})"></div></sc-if>
+                    <sc-if value="{{ v.noPhoto }}">{{ v.initials }}</sc-if>
+                  </div>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                    <div style="display:flex;gap:8px;align-items:center"><span style="flex:1;font-weight:700">{{ v.name }}</span><span class="{{ v.tagClass }}">{{ v.statusLabel }}</span></div>
+                    <span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ v.sub }}</span>
+                    <sc-if value="{{ v.canAllow }}"><button class="btn btn-primary" style="align-self:flex-start;margin-top:6px" onClick="{{ v.allow }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4 M10 17l5-5-5-5 M15 12H3"></path></svg>Allow in</button></sc-if>
+                    <sc-if value="{{ v.canExit }}"><button class="btn btn-secondary" style="align-self:flex-start;margin-top:6px" onClick="{{ v.exit }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9"></path></svg>Mark exit</button></sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--color-divider)">
+          <sc-for list="{{ secTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.pick }}" style="background:none;border:0;border-top:3px solid {{ t.bd }};margin-top:-2px;padding:12px 10px 18px;text-align:left;font:inherit;font-size:13px;font-weight:700;color:{{ t.fg }};cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="display:block"><path d="{{ t.icon }}"></path></svg>{{ t.label }}</button></sc-for>
+        </div>
+        <sc-if value="{{ secAlert }}">
+          <div style="position:absolute;top:40px;left:8px;right:8px;z-index:7;background:var(--color-text);color:var(--color-bg);padding:12px 14px;box-shadow:var(--shadow-lg);display:flex;gap:10px;align-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M7 18v-6a5 5 0 1 1 10 0v6 M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z M21 12h1 M18.5 4.5 18 5 M2 12h1 M12 2v1 M4.93 4.93l.71.71 M12 12v6"></path></svg><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-300)">Resident alert · now</span><span style="font-size:13px;font-weight:700">{{ secAlert }}</span></div><button class="btn" style="border:1px solid var(--color-bg);color:var(--color-bg)" onClick="{{ secGoHome }}">View</button></div>
+        </sc-if>
+        <sc-if value="{{ secToast }}">
+          <div style="position:absolute;bottom:70px;left:8px;right:8px;z-index:5;background:var(--color-text);color:var(--color-bg);padding:12px 14px;box-shadow:var(--shadow-lg);font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px"><span style="color:var(--color-neutral-300)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M9 12l2 2 4-4"></path></svg></span>{{ secToast }}</div>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- 03 MEMBER -->
+    <div style="display:flex;flex-direction:column;gap:12px;width:375px">
+      <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700">03 — Member · owner or tenant</div><div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">One app for owners and tenants.</div></div>
+      <div data-screen-label="Member" style="width:375px;height:780px;border:2px solid var(--color-text);background:var(--color-bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)">
+        <div style="height:34px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 20px;font-size:12px;font-weight:600"><span>9:41</span><span style="display:flex;align-items:center;gap:6px"><svg width="17" height="11" viewBox="0 0 17 11" style="display:block"><rect x="0" y="7" width="3" height="4" fill="currentColor"></rect><rect x="4.5" y="5" width="3" height="6" fill="currentColor"></rect><rect x="9" y="2.5" width="3" height="8.5" fill="currentColor"></rect><rect x="13.5" y="0" width="3" height="11" fill="currentColor"></rect></svg><span style="font-size:11px">5G</span><svg width="25" height="12" viewBox="0 0 25 12" style="display:block"><rect x="0.75" y="0.75" width="20.5" height="10.5" fill="none" stroke="currentColor" stroke-width="1.5"></rect><rect x="3" y="3" width="13" height="6" fill="currentColor"></rect><rect x="22.5" y="4" width="2" height="4" fill="currentColor"></rect></svg></span></div>
+        <div style="flex:none;display:flex;align-items:center;gap:12px;padding:10px 16px 12px;border-bottom:2px solid var(--color-divider)">
+          <div style="width:40px;height:40px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-bg);font-weight:800;font-size:14px;overflow:hidden"><sc-if value="{{ socHasLogo }}" hint-placeholder-val="{{ false }}"><div style="width:100%;height:100%;background:#fff center/contain no-repeat url({{ socLogo }})"></div></sc-if><sc-if value="{{ socNoLogo }}" hint-placeholder-val="{{ true }}">{{ socInitials }}</sc-if></div><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-700);font-weight:600">{{ memMeName }} · {{ memUnit }}</span><span style="font-weight:800;font-size:18px">{{ memTitle }}</span></div><button class="btn btn-icon btn-secondary" aria-label="Contact security" onClick="{{ memOpenAlert }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg></button><button class="btn btn-icon btn-secondary" aria-label="Notifications" onClick="{{ memGoApprovals }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></button>
+        </div>
+        <div style="flex:none;display:flex;gap:20px;padding:0 16px;border-bottom:2px solid var(--color-divider)">
+          <sc-for list="{{ memUnitTabs }}" as="u" hint-placeholder-count="2"><button onClick="{{ u.pick }}" style="background:none;border:0;border-bottom:3px solid {{ u.bd }};margin-bottom:-2px;padding:10px 0 8px;font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;color:{{ u.fg }}"><span style="font-weight:800;font-size:14px">{{ u.id }}</span><span style="font-size:11px">{{ u.role }}</span></button></sc-for>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px">
+          <sc-if value="{{ memIsApprovals }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ memAlerts }}" as="a"><div style="display:flex;gap:12px;align-items:center;padding:12px 14px;background:var(--color-text);color:var(--color-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M7 18v-6a5 5 0 1 1 10 0v6 M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z M21 12h1 M18.5 4.5 18 5 M2 12h1 M12 2v1 M4.93 4.93l.71.71 M12 12v6"></path></svg><div style="flex:1;display:flex;flex-direction:column"><span style="font-weight:700">{{ a.type }} · {{ a.time }}</span><span style="font-size:12px;color:var(--color-neutral-300)">{{ a.statusLabel }}</span></div></div></sc-for>
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid var(--color-text)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+                <div style="flex:1;display:flex;flex-direction:column;min-width:0"><span style="font-weight:700">Security · Main gate</span><span style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ gatePhoneFmt }} · 24×7</span></div>
+                <a class="btn btn-secondary btn-icon" href="{{ gateTel }}" aria-label="Call security"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+                <button class="btn btn-primary" onClick="{{ memOpenAlert }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M7 18v-6a5 5 0 1 1 10 0v6 M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z M21 12h1 M18.5 4.5 18 5 M2 12h1 M12 2v1 M4.93 4.93l.71.71 M12 12v6"></path></svg>Alert</button>
+              </div>
+              <sc-if value="{{ memNoPending }}"><p style="margin:0;font-size:14px;color:color-mix(in srgb,var(--color-text) 70%,transparent)">No one is waiting at the gate for your units. You'll be notified when security logs a visitor.</p></sc-if>
+              <sc-for list="{{ memPending }}" as="v" hint-placeholder-count="1">
+                <div style="display:flex;flex-direction:column;gap:12px;padding:14px;border:2px solid var(--color-text)">
+                  <div style="display:flex;align-items:center"><span style="flex:1;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">At the gate · {{ v.flat }} · {{ v.time }}</span><span class="tag tag-outline">Waiting</span></div>
+                  <div style="display:flex;gap:12px">
+                    <div style="width:72px;height:72px;flex:none;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;overflow:hidden">
+                      <sc-if value="{{ v.hasPhoto }}" hint-placeholder-val="{{ false }}"><div class="grayscale" style="width:100%;height:100%;background:center/cover no-repeat url({{ v.photo }})"></div></sc-if>
+                      <sc-if value="{{ v.noPhoto }}">{{ v.initials }}</sc-if>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-weight:800;font-size:18px">{{ v.name }}</span>
+                      <span style="font-size:13px">{{ v.purpose }}</span>
+                      <span style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ v.mobileFmt }}</span>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                    <button class="btn btn-primary" style="padding:12px 14px;justify-content:flex-start" onClick="{{ v.approve }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 6 9 17l-5-5"></path></svg>Approve</button>
+                    <button class="btn btn-secondary" style="padding:12px 14px;justify-content:flex-start" onClick="{{ v.deny }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M18 6 6 18 M6 6l12 12"></path></svg>Deny</button>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent);padding:8px 0 6px;border-bottom:2px solid var(--color-divider)">Today at {{ memUnit }}</div>
+              <sc-for list="{{ memHistory }}" as="v">
+                <div style="display:flex;gap:8px;align-items:center;padding:4px 0 10px;border-bottom:1px solid var(--color-divider)">
+                  <div style="flex:1;display:flex;flex-direction:column"><span style="font-weight:700">{{ v.name }}</span><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ v.purpose }} · {{ v.via }} · {{ v.time }}</span></div>
+                  <sc-if value="{{ v.canExtend }}"><button class="btn btn-ghost" onClick="{{ v.extend }}">Extend</button></sc-if>
+                  <span class="{{ v.tagClass }}">{{ v.statusLabel }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ memIsUnits }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <p style="margin:0;font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Owners and tenants use this same app. Security picks the unit at the gate and the request goes to the number registered here. Tenant changes are made by the admin on request.</p>
+              <div style="display:flex;flex-direction:column;border:2px solid var(--color-text)">
+                <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--color-divider)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2 M8 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0"></path></svg><span style="flex:1;font-weight:800;font-size:17px">My profile</span><sc-if value="{{ memProfView }}" hint-placeholder-val="{{ true }}"><button class="btn btn-ghost" onClick="{{ memProfEdit }}">Edit</button></sc-if></div>
+                <sc-if value="{{ memProfView }}" hint-placeholder-val="{{ true }}"><div style="padding:10px 14px;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{ memMeName }}</span><span style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ memMeMobileFmt }} · signs you in and receives gate requests</span></div></sc-if>
+                <sc-if value="{{ memProfEditing }}" hint-placeholder-val="{{ false }}"><div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+                  <div class="field"><label>Name</label><input class="input" value="{{ memProf.name }}" onChange="{{ memProfOn.name }}" placeholder="Full name"></div>
+                  <div class="field"><label>Mobile number</label><input class="input" value="{{ memProf.mobile }}" onChange="{{ memProfOn.mobile }}" inputmode="numeric" placeholder="10-digit mobile"></div>
+                  <sc-if value="{{ memProfOtpStep }}"><div class="field"><label>OTP sent to the new number</label><input class="input" value="{{ memProf.otpIn }}" onChange="{{ memProfOn.otpIn }}" inputmode="numeric" maxlength="4" placeholder="4 digits" style="letter-spacing:0.3em"></div></sc-if>
+                  <sc-if value="{{ memProfErr }}"><div style="font-size:13px;color:var(--color-accent-700)">{{ memProfErr }}</div></sc-if>
+                  <div style="display:flex;gap:8px"><button class="btn btn-primary" disabled="{{ memProfCantSave }}" onClick="{{ memProfSave }}">{{ memProfSaveLabel }}</button><button class="btn btn-secondary" onClick="{{ memProfCancel }}">Cancel</button></div>
+                  <span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">A new number is confirmed by OTP and updates on every unit you hold.</span>
+                </div></sc-if>
+              </div>
+              <sc-for list="{{ memUnitCards }}" as="u" hint-placeholder-count="2">
+                <div style="display:flex;flex-direction:column;border:2px solid var(--color-text)">
+                  <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--color-divider)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2 M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2 M10 6h4 M10 10h4 M10 14h4 M10 18h4"></path></svg><span style="flex:1;font-weight:800;font-size:17px">{{ u.id }}</span><span class="{{ u.tagClass }}">{{ u.statusTag }}</span></div>
+                  <div style="padding:10px 14px;display:flex;flex-direction:column;gap:2px;border-bottom:1px solid var(--color-divider)"><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Owner</span><span style="font-size:14px;font-weight:600">{{ u.ownerLine }}</span></div>
+                  <sc-if value="{{ u.hasTenant }}"><div style="display:flex;flex-direction:column">
+                    <div style="padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--color-divider)"><div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Tenant</span><span style="font-size:14px;font-weight:600">{{ u.tenantLine }}</span></div><sc-if value="{{ u.canReqRemove }}"><button class="btn btn-ghost" onClick="{{ u.reqRemove }}">Request removal</button></sc-if><sc-if value="{{ u.removePending }}"><span class="tag tag-outline">Removal requested</span></sc-if></div>
+                    <sc-if value="{{ u.isOwner }}"><div style="display:flex;flex-direction:column"><div style="padding:12px 14px;display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--color-divider)"><span style="flex:1;font-size:14px;font-weight:600">Send visitor requests to tenant</span><button onClick="{{ u.toggleDivert }}" style="flex:none;width:46px;height:26px;padding:0;border:2px solid var(--color-text);background:{{ u.div.track }};cursor:pointer;display:flex;align-items:center"><span style="width:16px;height:16px;margin-left:{{ u.div.x }};background:{{ u.div.knob }}"></span></button></div>
+                    <sc-if value="{{ u.showCc }}"><div style="padding:12px 14px;display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--color-divider)"><span style="flex:1;font-size:14px;font-weight:600">Also notify me</span><button onClick="{{ u.toggleCc }}" style="flex:none;width:46px;height:26px;padding:0;border:2px solid var(--color-text);background:{{ u.cc.track }};cursor:pointer;display:flex;align-items:center"><span style="width:16px;height:16px;margin-left:{{ u.cc.x }};background:{{ u.cc.knob }}"></span></button></div></sc-if></div></sc-if>
+                  </div></sc-if>
+                  <sc-if value="{{ u.isAdding }}"><div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--color-divider)">
+                    <span style="font-size:13px">The admin verifies and adds the tenant. Your tenant then signs in to Gatepass with this number.</span>
+                    <div class="field"><label>Tenant name</label><input class="input" value="{{ u.tName }}" onChange="{{ u.onTName }}" placeholder="Full name"></div>
+                    <div class="field"><label>Tenant mobile</label><input class="input" inputmode="numeric" value="{{ u.tMobile }}" onChange="{{ u.onTMobile }}" placeholder="10-digit mobile"></div>
+                    <div style="display:flex;gap:8px"><button class="btn btn-primary" disabled="{{ u.cantSave }}" onClick="{{ u.save }}">Send to admin</button><button class="btn btn-secondary" onClick="{{ u.cancel }}">Cancel</button></div>
+                  </div></sc-if>
+                  <sc-if value="{{ u.canAdd }}"><div style="padding:6px 10px;border-bottom:1px solid var(--color-divider)"><button class="btn btn-ghost" onClick="{{ u.startAdd }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M5 12h14 M12 5v14"></path></svg>Request admin to add tenant</button></div></sc-if>
+                  <sc-if value="{{ u.addPending }}"><div style="padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--color-divider)"><div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Tenant · awaiting admin</span><span style="font-size:14px;font-weight:600">{{ u.pendingLine }}</span></div><button class="btn btn-ghost" onClick="{{ u.cancelReq }}">Cancel</button></div></sc-if>
+                  <sc-if value="{{ u.isTenantView }}"><div style="padding:10px 14px;font-size:13px;border-bottom:1px solid var(--color-divider)">You are the tenant here. The owner decides whether visitor requests come to you.</div></sc-if>
+                  <div style="padding:10px 14px;display:flex;gap:8px;align-items:center;background:var(--color-surface)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span style="font-size:13px">Requests go to <strong>{{ u.goesTo }}</strong></span></div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ memIsActivity }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div class="seg" style="display:grid;grid-template-columns:repeat(4,1fr)"><sc-for list="{{ memRanges }}" as="o" hint-placeholder-count="4"><label class="seg-opt" style="justify-content:flex-start"><input type="radio" name="memrange" checked="{{ o.on }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for></div>
+              <sc-if value="{{ memIsCustom }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="field"><label>From</label><input type="date" class="input" value="{{ memFrom }}" max="{{ memTo }}" onChange="{{ onmemFrom }}"></div><div class="field"><label>To</label><input type="date" class="input" value="{{ memTo }}" min="{{ memFrom }}" max="{{ today }}" onChange="{{ onmemTo }}"></div></div></sc-if>
+              <div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ memSummary }}</div>
+              <sc-if value="{{ memEmpty }}"><p style="margin:0;font-size:14px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">No activity in this range.</p></sc-if>
+              <sc-for list="{{ memDays }}" as="d">
+                <div style="display:flex;flex-direction:column">
+                  <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent);padding:8px 0 6px;border-bottom:2px solid var(--color-divider)">{{ d.label }}</div>
+                  <sc-for list="{{ d.items }}" as="e">
+                    <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--color-divider)">
+                      <div style="width:32px;height:32px;flex:none;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:{{ e.color }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="display:block"><path d="{{ e.icon }}"></path></svg></div>
+                      <div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:700;font-size:14px">{{ e.name }}</span><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ e.sub }}</span></div>
+                      <span style="font-size:12px;font-weight:600">{{ e.time }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ memIsPre }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-if value="{{ memHasGen }}">
+                <div class="card" style="padding:16px;gap:12px">
+                  <span class="card-kicker">Pass ready · {{ memGenFor }}</span>
+                  <div style="display:flex;gap:16px;align-items:center">
+                    <svg viewBox="0 0 25 25" width="128" height="128" style="flex:none;background:#fff"><path d="{{ memGenQr }}" fill="#201e1d"></path></svg>
+                    <div style="display:flex;flex-direction:column;gap:4px">
+                      <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 60%,transparent)">Entry code</span>
+                      <span style="font-weight:800;font-size:28px;letter-spacing:0.08em">{{ memGenCode }}</span>
+                      <span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ memGenValid }}</span>
+                    </div>
+                  </div>
+                  <sc-if value="{{ memGenSent }}"><div style="font-size:13px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M9 12l2 2 4-4"></path></svg>Sent by SMS to {{ memGenMobile }}.</div></sc-if>
+                  <sc-if value="{{ memGenNotSent }}"><button class="btn btn-primary btn-block" style="padding:12px 14px" onClick="{{ memShare }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z M21.854 2.147l-10.94 10.939"></path></svg>Share code and QR</button></sc-if>
+                  <button class="btn btn-ghost" style="align-self:flex-start" onClick="{{ memNew }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M5 12h14 M12 5v14"></path></svg>Pre-approve another visitor</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ memNoGen }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:14px">
+                  <div class="field"><label>Visitor name</label><input class="input" value="{{ memName }}" onChange="{{ onMemName }}" placeholder="Full name"></div>
+                  <div class="field"><label>Visitor mobile</label><div style="position:relative;flex:1;display:flex"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:color-mix(in srgb,var(--color-text) 65%,transparent);pointer-events:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span><input class="input" style="padding-left:34px" inputmode="numeric" value="{{ memMobile }}" onChange="{{ onMemMobile }}" placeholder="10-digit mobile"></div><div style="font-size:12px;margin-top:4px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Use 9820011223 to see it arrive on the Visitor phone.</div></div>
+                  <div class="field"><label>Purpose of visit</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px">
+                      <sc-for list="{{ memChips }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.pick }}" style="padding:8px 12px;font:inherit;font-size:13px;font-weight:600;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;display:flex;align-items:center;gap:6px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="display:block"><path d="{{ c.icon }}"></path></svg>{{ c.label }}</button></sc-for>
+                    </div>
+                  </div>
+                  <div class="field"><label>Date</label>
+                    <div class="seg"><sc-for list="{{ memDates }}" as="o" hint-placeholder-count="2"><label class="seg-opt"><input type="radio" name="memdate" checked="{{ o.on }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for></div>
+                  </div>
+                  <button class="btn btn-primary btn-block" style="padding:14px 16px;font-size:15px" disabled="{{ memCantGen }}" onClick="{{ memGenerate }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M3 3h5v5H3z M16 3h5v5h-5z M3 16h5v5H3z M21 16h-3a2 2 0 0 0-2 2v3 M21 21v.01 M12 7v3a2 2 0 0 1-2 2H7 M3 12h.01 M12 3h.01 M12 16v.01 M16 12h1 M21 12v.01 M12 21v-1"></path></svg>Generate code and QR</button>
+                </div>
+              </sc-if>
+              <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent);padding:8px 0 6px;border-bottom:2px solid var(--color-divider)">Passes issued</div>
+              <sc-for list="{{ memPasses }}" as="p">
+                <div style="display:flex;gap:8px;align-items:center;padding:4px 0 10px;border-bottom:1px solid var(--color-divider)">
+                  <div style="flex:1;display:flex;flex-direction:column"><span style="font-weight:700">{{ p.name }}</span><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ p.code }} · {{ p.valid }}</span></div>
+                  <button class="btn btn-ghost" onClick="{{ p.extend }}">Extend</button>
+                  <span class="{{ p.tagClass }}">{{ p.statusLabel }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--color-divider)">
+          <sc-for list="{{ memTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.pick }}" style="background:none;border:0;border-top:3px solid {{ t.bd }};margin-top:-2px;padding:12px 8px 18px;text-align:left;font:inherit;font-size:13px;font-weight:700;color:{{ t.fg }};cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="display:block"><path d="{{ t.icon }}"></path></svg>{{ t.label }}</button></sc-for>
+        </div>
+        <sc-if value="{{ memAlertOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;z-index:6;display:flex;align-items:flex-end;background:color-mix(in srgb,var(--color-neutral-900) 50%,transparent)">
+            <div class="dialog" style="width:100%;padding:20px 16px 24px;max-height:92%;overflow-y:auto">
+              <div class="dialog-title">Contact security</div>
+              <div style="display:flex;flex-direction:column;border-top:2px solid var(--color-divider)">
+                <sc-for list="{{ secContacts }}" as="c" hint-placeholder-count="2"><div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--color-divider)"><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ c.label }}</span><span style="font-weight:700">{{ c.name }}</span><span style="font-size:13px">{{ c.phone }}</span></div><a class="btn btn-secondary" href="{{ c.tel }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a></div></sc-for>
+              </div>
+              <div class="field"><label>Or send an alert to the gate</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><sc-for list="{{ memAlertTypes }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.pick }}" style="padding:10px 12px;font:inherit;font-size:13px;font-weight:600;text-align:left;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};cursor:pointer">{{ c.label }}</button></sc-for></div></div>
+              <div class="field"><label>Note (optional)</label><input class="input" value="{{ memAlertNote }}" onChange="{{ onMemAlertNote }}" placeholder="e.g. Father has fallen, need help"></div>
+              <div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Security sees your name, unit {{ memUnit }} and phone number.</div>
+              <div class="dialog-actions" style="justify-content:flex-start"><button class="btn btn-primary" disabled="{{ memAlertCant }}" onClick="{{ memSendAlert }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M7 18v-6a5 5 0 1 1 10 0v6 M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z M21 12h1 M18.5 4.5 18 5 M2 12h1 M12 2v1 M4.93 4.93l.71.71 M12 12v6"></path></svg>Send alert</button><button class="btn btn-secondary" onClick="{{ memCloseAlert }}">Cancel</button></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ memExtOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;z-index:6;display:flex;align-items:flex-end;background:color-mix(in srgb,var(--color-neutral-900) 50%,transparent)">
+            <div class="dialog" style="width:100%;padding:20px 16px 24px">
+              <div class="dialog-title">Extend approval</div>
+              <div class="dialog-body" style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:700">{{ memExtName }}</span><span style="font-size:13px">{{ memExtSub }}</span></div>
+              <div class="field"><label>Extend for</label><div class="seg" style="display:grid;grid-template-columns:repeat(4,1fr)"><sc-for list="{{ memExtDurs }}" as="o" hint-placeholder-count="4"><label class="seg-opt" style="justify-content:flex-start"><input type="radio" name="memext" checked="{{ o.on }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for></div></div>
+              <sc-if value="{{ memExtIsCustom }}"><div class="field"><label>Valid until</label><input type="date" class="input" value="{{ memExtDate }}" min="{{ today }}" onChange="{{ onMemExtDate }}"></div></sc-if>
+              <div style="font-size:13px">Valid until <strong>{{ memExtUntil }}</strong>. The same code keeps working for repeat entries.</div>
+              <div class="dialog-actions" style="justify-content:flex-start"><button class="btn btn-primary" onClick="{{ memExtConfirm }}">Extend approval</button><button class="btn btn-secondary" onClick="{{ memExtCancel }}">Cancel</button></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ memBanner }}">
+          <div style="position:absolute;top:40px;left:8px;right:8px;z-index:5;background:var(--color-text);color:var(--color-bg);padding:12px 14px;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-300);font-weight:600;display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>Gatepass · now</span>
+            <span style="font-size:13px">{{ memBanner }}</span>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent)">Signed in as</span><div class="seg" style="align-self:flex-start"><sc-for list="{{ memAccounts }}" as="a" hint-placeholder-count="2"><label class="seg-opt"><input type="radio" name="memacct" checked="{{ a.on }}" onChange="{{ a.pick }}">{{ a.label }}</label></sc-for></div></div>
+    </div>
+
+    <!-- 04 ADMIN -->
+    <div style="display:flex;flex-direction:column;gap:12px;width:375px">
+      <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700">04 — Admin</div><div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Sets rules, manages members, sees all activity.</div></div>
+      <div data-screen-label="Admin" style="width:375px;height:780px;border:2px solid var(--color-text);background:var(--color-bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)">
+        <div style="height:34px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 20px;font-size:12px;font-weight:600"><span>9:41</span><span style="display:flex;align-items:center;gap:6px"><svg width="17" height="11" viewBox="0 0 17 11" style="display:block"><rect x="0" y="7" width="3" height="4" fill="currentColor"></rect><rect x="4.5" y="5" width="3" height="6" fill="currentColor"></rect><rect x="9" y="2.5" width="3" height="8.5" fill="currentColor"></rect><rect x="13.5" y="0" width="3" height="11" fill="currentColor"></rect></svg><span style="font-size:11px">5G</span><svg width="25" height="12" viewBox="0 0 25 12" style="display:block"><rect x="0.75" y="0.75" width="20.5" height="10.5" fill="none" stroke="currentColor" stroke-width="1.5"></rect><rect x="3" y="3" width="13" height="6" fill="currentColor"></rect><rect x="22.5" y="4" width="2" height="4" fill="currentColor"></rect></svg></span></div>
+        <div style="flex:none;display:flex;align-items:center;gap:12px;padding:10px 16px 12px;border-bottom:2px solid var(--color-divider)">
+          <div style="width:40px;height:40px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--color-text);color:var(--color-bg);font-weight:800;font-size:14px;overflow:hidden"><sc-if value="{{ socHasLogo }}" hint-placeholder-val="{{ false }}"><div style="width:100%;height:100%;background:#fff center/contain no-repeat url({{ socLogo }})"></div></sc-if><sc-if value="{{ socNoLogo }}" hint-placeholder-val="{{ true }}">{{ socInitials }}</sc-if></div><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-neutral-700);font-weight:600">Admin · Society office</span><span style="font-weight:800;font-size:18px">{{ admTitle }}</span></div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:0 16px 16px;display:flex;flex-direction:column">
+          <sc-if value="{{ admIsSettings }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column">
+              <div style="display:flex;flex-direction:column;gap:12px;padding:16px 0;border-bottom:1px solid var(--color-divider)">
+                <span style="font-weight:700">Society profile</span>
+                <div style="display:flex;gap:12px;align-items:flex-end">
+                  <label style="width:72px;height:72px;flex:none;border:2px dashed var(--color-divider);background:var(--color-surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;overflow:hidden;font-size:11px;font-weight:600">
+                    <input type="file" accept="image/*" onChange="{{ onSocLogo }}" style="display:none">
+                    <sc-if value="{{ socHasLogo }}" hint-placeholder-val="{{ false }}"><div style="width:100%;height:100%;background:#fff center/contain no-repeat url({{ socLogo }})"></div></sc-if>
+                    <sc-if value="{{ socNoLogo }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M3 3h18v18H3z M7 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg><span>Add logo</span></sc-if>
+                  </label>
+                  <div class="field" style="flex:1"><label>Society name</label><input class="input" value="{{ socName }}" onChange="{{ onSocName }}" placeholder="Society name"></div>
+                </div>
+                <sc-if value="{{ socHasLogo }}"><button class="btn btn-ghost" style="align-self:flex-start" onClick="{{ socRemoveLogo }}">Remove logo</button></sc-if>
+                <span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Shown in every app, on visitor passes and in SMS.</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--color-divider)">
+                <span style="font-weight:700">Security contacts</span>
+                <div class="field"><label>Main gate phone</label><input class="input" inputmode="numeric" value="{{ gatePhone }}" onChange="{{ onGatePhone }}" placeholder="10-digit number"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="field"><label>Supervisor</label><input class="input" value="{{ supName }}" onChange="{{ onSupName }}"></div><div class="field"><label>Supervisor phone</label><input class="input" inputmode="numeric" value="{{ supPhone }}" onChange="{{ onSupPhone }}"></div></div>
+                <span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Members see these numbers and can call or alert security from their app.</span>
+              </div>
+              <div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--color-divider)">
+                <div style="width:36px;height:36px;flex:none;background:var(--color-surface);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z M9 12l2 2 4-4"></path></svg></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="font-weight:700">Verify visitor mobile with OTP</span><span style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Security sends a one-time code by SMS and enters it before logging the visitor.</span></div>
+                <button onClick="{{ toggleOtp }}" aria-label="Toggle OTP" style="flex:none;width:46px;height:26px;padding:0;border:2px solid var(--color-text);background:{{ otpTrack }};cursor:pointer;display:flex;align-items:center"><span style="width:16px;height:16px;margin-left:{{ otpKnobX }};background:{{ otpKnob }}"></span></button>
+              </div>
+              <div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--color-divider)">
+                <div style="width:36px;height:36px;flex:none;background:var(--color-surface);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="font-weight:700">Send pass to visitor's mobile</span><span style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Pre-approved codes go out by SMS with a link to the QR pass. When off, residents share them manually.</span></div>
+                <button onClick="{{ toggleShare }}" aria-label="Toggle SMS" style="flex:none;width:46px;height:26px;padding:0;border:2px solid var(--color-text);background:{{ shareTrack }};cursor:pointer;display:flex;align-items:center"><span style="width:16px;height:16px;margin-left:{{ shareKnobX }};background:{{ shareKnob }}"></span></button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--color-divider)">
+                <div style="display:flex;gap:16px"><div style="width:36px;height:36px;flex:none;background:var(--color-surface);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M12 6v6l4 2"></path></svg></div><div style="display:flex;flex-direction:column;gap:4px"><span style="font-weight:700">Pass validity</span><span style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">How long a pre-approved code stays usable.</span></div></div>
+                <div class="seg" style="align-self:flex-start;margin-left:52px"><sc-for list="{{ validityOpts }}" as="o" hint-placeholder-count="3"><label class="seg-opt"><input type="radio" name="validity" checked="{{ o.on }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for></div>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ admIsDir }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:10px;padding-top:16px">
+              <sc-if value="{{ admHasReqs }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px;padding-bottom:8px">
+                <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent)">Tenant requests</div>
+                <sc-for list="{{ admReqs }}" as="r"><div style="display:flex;flex-direction:column;gap:6px;padding:12px;border:2px solid var(--color-text)">
+                  <div style="display:flex;align-items:center"><span style="flex:1;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700)">{{ r.title }} · {{ r.unit }}</span><span class="tag tag-outline">Pending</span></div>
+                  <span style="font-weight:800;font-size:16px">{{ r.person }}</span>
+                  <span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ r.by }}</span>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px"><button class="btn btn-primary" style="justify-content:flex-start" onClick="{{ r.approve }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M20 6 9 17l-5-5"></path></svg>Approve</button><button class="btn btn-secondary" style="justify-content:flex-start" onClick="{{ r.reject }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M18 6 6 18 M6 6l12 12"></path></svg>Reject</button></div>
+                </div></sc-for>
+              </div></sc-if>
+              <button class="btn btn-primary btn-block" style="margin-top:0;padding:12px 14px" onClick="{{ admStartAdd }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M5 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0 M19 8v6 M22 11h-6"></path></svg>Add member</button>
+              <div style="position:relative;display:flex"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:color-mix(in srgb,var(--color-text) 65%,transparent);pointer-events:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M3 11a8 8 0 1 0 16 0a8 8 0 1 0-16 0 M21 21l-4.3-4.3"></path></svg></span><input class="input" style="padding-left:34px" value="{{ admQuery }}" onChange="{{ onAdmQuery }}" placeholder="Search unit, owner, tenant or phone"></div>
+              <div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ admUnitCount }}</div>
+              <div style="display:flex;flex-direction:column;border-top:2px solid var(--color-divider)">
+                <sc-for list="{{ admUnits }}" as="u" hint-placeholder-count="4">
+                  <div style="display:flex;flex-direction:column;gap:6px;padding:12px 0;border-bottom:1px solid var(--color-divider)">
+                    <div style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2 M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2 M10 6h4 M10 10h4 M10 14h4 M10 18h4"></path></svg><span style="flex:1;font-weight:800;font-size:16px">{{ u.id }}</span><span class="tag tag-neutral">{{ u.type }}</span><button class="btn btn-ghost" onClick="{{ u.edit }}">Edit</button></div>
+                    <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:3px 8px;font-size:13px"><span style="color:color-mix(in srgb,var(--color-text) 65%,transparent)">Owner</span><span>{{ u.owner }}</span><span style="color:color-mix(in srgb,var(--color-text) 65%,transparent)">Tenant</span><span>{{ u.tenant }}</span><span style="color:color-mix(in srgb,var(--color-text) 65%,transparent)">Notifies</span><span style="font-weight:700">{{ u.goesTo }}</span></div>
+                  </div>
+                </sc-for>
+              </div>
+              <p style="margin:0;font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">One person can hold several units. Owners request tenant changes from their app and the admin approves them here. Tenants sign in to the same app with their registered number.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ admIsActivity }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:12px;padding-top:16px">
+              <div class="seg" style="display:grid;grid-template-columns:repeat(4,1fr)"><sc-for list="{{ admRanges }}" as="o" hint-placeholder-count="4"><label class="seg-opt" style="justify-content:flex-start"><input type="radio" name="admrange" checked="{{ o.on }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for></div>
+              <sc-if value="{{ admIsCustom }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="field"><label>From</label><input type="date" class="input" value="{{ admFrom }}" max="{{ admTo }}" onChange="{{ onadmFrom }}"></div><div class="field"><label>To</label><input type="date" class="input" value="{{ admTo }}" min="{{ admFrom }}" max="{{ today }}" onChange="{{ onadmTo }}"></div></div></sc-if>
+              <div style="font-size:13px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ admSummary }}</div>
+              <sc-if value="{{ admEmpty }}"><p style="margin:0;font-size:14px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">No activity in this range.</p></sc-if>
+              <sc-for list="{{ admDays }}" as="d">
+                <div style="display:flex;flex-direction:column">
+                  <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent);padding:8px 0 6px;border-bottom:2px solid var(--color-divider)">{{ d.label }}</div>
+                  <sc-for list="{{ d.items }}" as="e">
+                    <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--color-divider)">
+                      <div style="width:32px;height:32px;flex:none;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:{{ e.color }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="display:block"><path d="{{ e.icon }}"></path></svg></div>
+                      <div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:700;font-size:14px">{{ e.name }}</span><span style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">{{ e.sub }}</span></div>
+                      <span style="font-size:12px;font-weight:600">{{ e.time }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          
+        </div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--color-divider)">
+          <sc-for list="{{ admTabs }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.pick }}" style="background:none;border:0;border-top:3px solid {{ t.bd }};margin-top:-2px;padding:12px 14px 18px;text-align:left;font:inherit;font-size:13px;font-weight:700;color:{{ t.fg }};cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="display:block"><path d="{{ t.icon }}"></path></svg>{{ t.label }}</button></sc-for>
+        </div>
+        <sc-if value="{{ admSheetOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;z-index:6;display:flex;align-items:flex-end;background:color-mix(in srgb,var(--color-neutral-900) 50%,transparent)">
+            <div class="dialog" style="width:100%;padding:20px 16px 24px;max-height:92%;overflow-y:auto">
+              <div class="dialog-title">{{ admSheetTitle }}</div>
+              <sc-if value="{{ admIsAdd }}"><div style="display:flex;flex-direction:column;gap:12px">
+                <div class="field"><label>Flat / office number</label><input class="input" value="{{ admE.unit }}" onChange="{{ admOn.unit }}" placeholder="e.g. D-201"></div>
+                <sc-if value="{{ admUnitHint }}"><div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent);margin-top:-6px">{{ admUnitHint }}</div></sc-if>
+                <sc-if value="{{ admShowType }}"><div class="field"><label>Type</label><div class="seg" style="align-self:flex-start"><sc-for list="{{ admTypes }}" as="o" hint-placeholder-count="2"><label class="seg-opt"><input type="radio" name="admtype" checked="{{ o.on }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for></div></div></sc-if>
+                <sc-if value="{{ admShowRole }}"><div class="field"><label>Role</label><div class="seg" style="align-self:flex-start"><sc-for list="{{ admRoles }}" as="o" hint-placeholder-count="2"><label class="seg-opt"><input type="radio" name="admrole" checked="{{ o.on }}" onChange="{{ o.pick }}">{{ o.label }}</label></sc-for></div></div></sc-if>
+                <div class="field"><label>Name</label><input class="input" value="{{ admE.name }}" onChange="{{ admOn.name }}" placeholder="Full name"></div>
+                <div class="field"><label>Mobile number</label><input class="input" value="{{ admE.mobile }}" onChange="{{ admOn.mobile }}" inputmode="numeric" placeholder="10-digit mobile"></div>
+                <sc-if value="{{ admWarn }}"><div style="font-size:13px;color:var(--color-accent-700)">{{ admWarn }}</div></sc-if>
+              </div></sc-if>
+              <sc-if value="{{ admIsEdit }}"><div style="display:flex;flex-direction:column;gap:12px">
+                <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent);padding-bottom:4px;border-bottom:2px solid var(--color-divider)">Owner</div>
+                <div class="field"><label>Name</label><input class="input" value="{{ admE.oName }}" onChange="{{ admOn.oName }}"></div>
+                <div class="field"><label>Mobile number</label><input class="input" value="{{ admE.oMobile }}" onChange="{{ admOn.oMobile }}" inputmode="numeric" placeholder="10-digit mobile"></div>
+                <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:color-mix(in srgb,var(--color-text) 60%,transparent);padding:6px 0 4px;border-bottom:2px solid var(--color-divider)">Tenant</div>
+                <div class="field"><label>Name</label><input class="input" value="{{ admE.tName }}" onChange="{{ admOn.tName }}" placeholder="No tenant"></div>
+                <div class="field"><label>Mobile number</label><input class="input" value="{{ admE.tMobile }}" onChange="{{ admOn.tMobile }}" inputmode="numeric" placeholder="10-digit mobile"></div>
+                <div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Clear both tenant fields to remove the tenant. Changes to a person apply to every unit they hold.</div>
+              </div></sc-if>
+              <div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 65%,transparent)">Members sign in to Gatepass with their registered mobile number.</div>
+              <div class="dialog-actions" style="justify-content:flex-start"><button class="btn btn-primary" disabled="{{ admCantSave }}" onClick="{{ admSave }}">{{ admSaveLabel }}</button><button class="btn btn-secondary" onClick="{{ admCancel }}">Cancel</button></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ admToast }}">
+          <div style="position:absolute;bottom:70px;left:8px;right:8px;z-index:5;background:var(--color-text);color:var(--color-bg);padding:12px 14px;box-shadow:var(--shadow-lg);font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px"><span style="color:var(--color-neutral-300)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none;display:block"><path d="M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M9 12l2 2 4-4"></path></svg></span>{{ admToast }}</div>
+        </sc-if>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startWithOtp&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;autoShare&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const ME = '9811100001';
+const SEED_UNITS = () => [
+  { id: 'A-101', type: 'Flat', owner: { name: 'Suresh Menon', mobile: '9811100011' }, tenant: null, divert: false, cc: false },
+  { id: 'A-304', type: 'Flat', owner: { name: 'Farah Khan', mobile: '9811100012' }, tenant: { name: 'Arjun Das', mobile: '9811100013' }, divert: true, cc: false },
+  { id: 'B-402', type: 'Flat', owner: { name: 'Ananya Rao', mobile: ME }, tenant: null, divert: false, cc: false },
+  { id: 'C-110', type: 'Flat', owner: { name: 'Ananya Rao', mobile: ME }, tenant: { name: 'Vikas Iyer', mobile: '9811100002' }, divert: true, cc: false },
+  { id: 'C-203', type: 'Flat', owner: { name: 'Meera Pillai', mobile: '9811100014' }, tenant: null, divert: false, cc: false },
+  { id: 'OFF-12', type: 'Office', owner: { name: 'Lexicon Legal LLP', mobile: '9811100015' }, tenant: null, divert: false, cc: false }
+];
+const PURPOSES = ['Guest', 'Delivery', 'Cab', 'Service', 'Other'];
+const ICON = {"Guest":"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2 M8 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0","Delivery":"M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z M12 22V12 M3.29 7 12 12l8.71-5 M7.5 4.27l9 5.15","Cab":"M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2 M9 17h6 M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M15 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0","Service":"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z","Other":"M11 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0 M18 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0 M4 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0","home":"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8 M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z","entry":"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M5 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0 M19 8v6 M22 11h-6","verify":"M3 7V5a2 2 0 0 1 2-2h2 M17 3h2a2 2 0 0 1 2 2v2 M21 17v2a2 2 0 0 1-2 2h-2 M7 21H5a2 2 0 0 1-2-2v-2 M7 12h10","log":"M3 12h.01 M3 18h.01 M3 6h.01 M8 12h13 M8 18h13 M8 6h13","approvals":"M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0","pre":"M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z M13 5v2 M13 17v2 M13 11v2","settings":"M21 4h-7 M10 4H3 M21 12h-9 M8 12H3 M21 20h-5 M12 20H3 M14 2v4 M8 10v4 M16 18v4"};
+Object.assign(ICON, { units: 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2 M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2 M10 6h4 M10 10h4 M10 14h4 M10 18h4', dir: 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2 M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2 M10 6h4 M10 10h4 M10 14h4 M10 18h4', "check":"M20 6 9 17l-5-5","x":"M18 6 6 18 M6 6l12 12","login":"M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4 M10 17l5-5-5-5 M15 12H3","logout":"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9","clock":"M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0 M12 6v6l4 2","activity":"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8 M3 3v5h5 M12 7v5l4 2"});
+const dayIso = n => { const d = new Date(); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const TODAY = dayIso(0);
+const fmtD = iso => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); };
+const KIND = {
+  request: ['At the gate, awaiting approval', ICON.entry, 'var(--color-text)'], approved: ['Approved by resident', ICON.check, 'var(--color-text)'],
+  denied: ['Denied by resident', ICON.x, 'var(--color-neutral-700)'], entry: ['Entered', ICON.login, 'var(--color-text)'],
+  exit: ['Exited', ICON.logout, 'var(--color-text)'], pass: ['Pass issued', ICON.pre, 'var(--color-text)'], extend: ['Approval extended', ICON.clock, 'var(--color-text)'], alert: ['Alert to security', ICON.approvals, 'var(--color-text)'], tenant: ['Directory', ICON.units, 'var(--color-text)'], profile: ['Profile', ICON.Guest, 'var(--color-text)']
+};
+const SEED_EVENTS = [
+  [0, '09:20', 'A-101', 'Suresh Kumar', 'exit', ''], [0, '10:15', 'B-402', 'Priya Nair', 'entry', 'Pass · Guest'], [0, '09:05', 'B-402', 'Rahul Mehta', 'pass', 'Guest · Today'], [0, '08:42', 'A-101', 'Suresh Kumar', 'entry', 'Walk-in · Delivery'],
+  [1, '18:30', 'B-402', 'Imran (Zomato)', 'entry', 'Walk-in · Delivery'], [1, '18:28', 'B-402', 'Imran (Zomato)', 'approved', ''], [2, '11:10', 'C-203', 'Meena (Urban Co.)', 'entry', 'Walk-in · Service'],
+  [3, '20:05', 'B-402', 'Karan Shah', 'denied', ''], [5, '17:15', 'B-402', 'Neha Joshi', 'entry', 'Pass · Guest'], [5, '16:40', 'B-402', 'Neha Joshi', 'pass', 'Guest · Today'],
+  [8, '09:30', 'A-304', 'Vikram (Ola)', 'entry', 'Walk-in · Cab'], [12, '19:45', 'B-402', 'Rahul Mehta', 'exit', ''], [12, '14:00', 'B-402', 'Rahul Mehta', 'entry', 'Pass · Guest'],
+  [18, '10:00', 'C-110', 'Ravi (Amazon)', 'entry', 'Walk-in · Delivery'], [25, '15:22', 'B-402', 'Ganesh (Plumber)', 'entry', 'Walk-in · Service'], [25, '15:20', 'B-402', 'Ganesh (Plumber)', 'approved', ''],
+  [40, '12:00', 'B-402', 'Priya Nair', 'pass', 'Guest']
+].map(([o, time, flat, name, kind, detail], i) => ({ id: 'e' + i, date: dayIso(-o), time, flat, name, kind, detail }));
+const now = () => new Date().toTimeString().slice(0, 5);
+const rnd = n => String(Math.floor(Math.random() * 10 ** n)).padStart(n, '0');
+const digits = (v, n) => v.replace(/\D/g, '').slice(0, n);
+const fmt = m => m && m.length === 10 ? `+91 ${m.slice(0, 5)} ${m.slice(5)}` : m;
+const STATUS = {
+  pending: ['Awaiting approval', 'tag tag-outline'], approved: ['Approved', 'tag tag-accent'],
+  denied: ['Denied', 'tag tag-neutral'], inside: ['Inside', 'tag tag-accent'], exited: ['Exited', 'tag tag-neutral']
+};
+const qrCache = {};
+function qrPath(seed) {
+  if (qrCache[seed]) return qrCache[seed];
+  let s = 7; for (const c of seed) s = (s * 31 + c.charCodeAt(0)) >>> 0;
+  const rand = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+  const N = 21; let d = '';
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const inF = (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+    let on;
+    if (inF) {
+      const fx = x < 8 ? x : x - (N - 7), fy = y < 8 ? y : y - (N - 7);
+      on = !(fx < 0 || fy < 0 || fx > 6 || fy > 6) && Math.max(Math.abs(fx - 3), Math.abs(fy - 3)) !== 2;
+    } else on = rand() < 0.5;
+    if (on) d += `M${x + 2} ${y + 2}h1v1h-1z`;
+  }
+  return (qrCache[seed] = d);
+}
+
+class Component extends DCLogic {
+  state = this.initial();
+  initial() {
+    return {
+      otp: !!this.props.startWithOtp, share: this.props.autoShare ?? true, validity: '24 hours',
+      visits: [
+        { id: 2, name: 'Priya Nair', mobile: '9876500022', flat: 'B-402', purpose: 'Guest', photo: null, status: 'inside', time: '10:15', via: 'Pass' },
+        { id: 1, name: 'Suresh Kumar', mobile: '9876500011', flat: 'A-101', purpose: 'Delivery', photo: null, status: 'exited', time: '08:42', via: 'Walk-in' }
+      ],
+      passes: [{ code: '482913', name: 'Rahul Mehta', mobile: '9820011223', flat: 'B-402', purpose: 'Guest', date: 'Today', valid: 'Today · valid 24 hours', sent: true, used: false }],
+      nextId: 3,
+      secTab: 'home', secName: '', secMobile: '', secFlat: '', secPurpose: '', secPhoto: null,
+      secOtpSent: '', secOtpIn: '', secVerified: false, secCode: '', secRes: null, secToast: null,
+      memTab: 'approvals', memName: '', memMobile: '', memPurpose: 'Guest', memDate: 'Today', memGen: null, memBanner: null,
+      visMobile: '9820011223', visSms: null, visOpen: null,
+      visMsgs: [{ text: 'Palm Grove: B-402 has invited you today. Entry code 482913. Open your pass:', time: '09:05', code: '482913' }],
+      admTab: 'settings', events: SEED_EVENTS,
+      memRange: '7 days', memFrom: dayIso(-6), memTo: TODAY, admRange: '7 days', admFrom: dayIso(-6), admTo: TODAY,
+      memExt: null, memExtDur: '3 days', memExtDate: dayIso(3),
+      units: SEED_UNITS(), memUnit: 'B-402', memAddFor: null, memTName: '', memTMobile: '', admQuery: '', memMe: ME, memOwner: ME, tenantReqs: [], memProf: null, admE: null, admToast: null,
+      society: { name: 'Palm Grove Residency', logo: null }, gatePhone: '9800012345', supName: 'Ramesh Patil', supPhone: '9800012346',
+      alerts: [], memAlertOpen: false, memAlertType: '', memAlertNote: '', secAlert: null
+    };
+  }
+  timers = {};
+  unit(id) { return this.state.units.find(u => u.id === id); }
+  recips(id) {
+    const u = this.unit(id); if (!u) return [];
+    const o = { ...u.owner, role: 'Owner' };
+    return u.tenant && u.divert ? [{ ...u.tenant, role: 'Tenant' }, ...(u.cc ? [o] : [])] : [o];
+  }
+  mine(id) { return this.recips(id).some(r => r.mobile === this.state.memMe); }
+  addReq(r) { this.setState(s => ({ tenantReqs: [...s.tenantReqs, { id: 'r' + Date.now(), status: 'pending', time: now(), ...r }] })); }
+  resolveReq(r, ok) {
+    this.setState(s => ({ tenantReqs: s.tenantReqs.map(x => x.id === r.id ? { ...x, status: ok ? 'approved' : 'rejected' } : x) }));
+    if (!ok) return this.flash('memBanner', `Admin declined the tenant request for ${r.unit}.`);
+    if (r.kind === 'add') {
+      this.updUnit(r.unit, { tenant: { name: r.name, mobile: r.mobile }, divert: true, cc: false });
+      this.flash('memBanner', `Admin added ${r.name} as tenant of ${r.unit}. They can sign in to Gatepass with ${fmt(r.mobile)}.`);
+    } else {
+      this.updUnit(r.unit, { tenant: null, divert: false, cc: false });
+      if (this.state.memMe === r.mobile) this.setState({ memMe: this.state.memOwner, memUnit: r.unit });
+      this.flash('memBanner', `Admin removed ${r.name} as tenant of ${r.unit}.`);
+    }
+    this.log('tenant', r.name, r.unit, r.kind === 'add' ? 'Tenant added by admin' : 'Tenant removed by admin');
+  }
+  updatePerson(old, np) {
+    this.setState(s => ({
+      units: s.units.map(u => ({ ...u, owner: u.owner.mobile === old ? { ...u.owner, ...np } : u.owner, tenant: u.tenant && u.tenant.mobile === old ? { ...u.tenant, ...np } : u.tenant })),
+      memMe: s.memMe === old ? np.mobile : s.memMe, memOwner: s.memOwner === old ? np.mobile : s.memOwner
+    }));
+  }
+  admSave() {
+    const s = this.state, e = s.admE;
+    if (e.mode === 'add') {
+      const id = e.unit.trim().toUpperCase(), ex = this.unit(id), p = { name: e.name.trim(), mobile: e.mobile };
+      if (!ex) this.setState(st => ({ units: [...st.units, { id, type: e.type, owner: p, tenant: null, divert: false, cc: false }].sort((a, b) => a.id.localeCompare(b.id)) }));
+      else if (e.role === 'Owner') this.updUnit(id, { owner: p });
+      else this.updUnit(id, { tenant: p, divert: true, cc: false });
+      const role = ex ? e.role : 'Owner';
+      this.log('tenant', p.name, id, role + ' added by admin');
+      this.flash('admToast', `${p.name} added as ${role.toLowerCase()} of ${id}`);
+    } else {
+      const u = this.unit(e.unit);
+      const o = { name: e.oName.trim(), mobile: e.oMobile };
+      if (o.name !== u.owner.name || o.mobile !== u.owner.mobile) this.updatePerson(u.owner.mobile, o);
+      const tBlank = !e.tName.trim() && !e.tMobile, t = { name: e.tName.trim(), mobile: e.tMobile };
+      if (u.tenant && tBlank) { this.updUnit(u.id, { tenant: null, divert: false, cc: false }); if (s.memMe === u.tenant.mobile) this.setState({ memMe: s.memOwner, memUnit: u.id }); }
+      else if (u.tenant && (t.name !== u.tenant.name || t.mobile !== u.tenant.mobile)) this.updatePerson(u.tenant.mobile, t);
+      else if (!u.tenant && !tBlank) this.updUnit(u.id, { tenant: t, divert: true, cc: false });
+      this.log('tenant', o.name, u.id, 'Details updated by admin');
+      this.flash('admToast', `${u.id} updated`);
+    }
+    this.setState({ admE: null });
+  }
+  memProfSave() {
+    const s = this.state, p = s.memProf, changed = p.mobile !== s.memMe;
+    if (changed && s.units.some(u => u.owner.mobile === p.mobile || (u.tenant && u.tenant.mobile === p.mobile)) && !s.units.some(u => u.owner.mobile === s.memMe && u.owner.mobile === p.mobile)) return this.setState({ memProf: { ...p, err: 'This number is already registered to another member.' } });
+    if (changed && !p.otp) { const otp = rnd(4); this.setState({ memProf: { ...p, otp, otpIn: '', err: '' } }); return this.flash('memBanner', `SMS to ${fmt(p.mobile)}: ${otp} is your Gatepass verification code.`); }
+    if (changed && p.otpIn !== p.otp) return this.setState({ memProf: { ...p, err: 'That code is incorrect.' } });
+    this.updatePerson(s.memMe, { name: p.name.trim(), mobile: p.mobile });
+    this.log('profile', p.name.trim(), s.memUnit, changed ? 'Mobile number updated' : 'Name updated');
+    this.setState({ memProf: null });
+    this.flash('memBanner', changed ? `Mobile number updated to ${fmt(p.mobile)}.` : 'Profile updated.');
+  }
+  personName(m) { for (const u of this.state.units) { if (u.owner.mobile === m) return u.owner.name; if (u.tenant && u.tenant.mobile === m) return u.tenant.name; } return 'Resident'; }
+  sendAlert() {
+    const s = this.state, a = { id: 'a' + Date.now(), type: s.memAlertType, note: s.memAlertNote.trim(), unit: s.memUnit, name: this.personName(s.memMe), mobile: s.memMe, time: now(), status: 'new' };
+    this.setState({ alerts: [a, ...s.alerts], memAlertOpen: false, memAlertType: '', memAlertNote: '' });
+    this.flash('secAlert', `${a.type} · ${a.unit} · ${a.name}`);
+    this.flash('memBanner', 'Alert sent. Security can see your unit and phone number.');
+    this.log('alert', a.name, a.unit, a.type);
+  }
+  setAlert(a, status) {
+    this.setState(s => ({ alerts: s.alerts.map(x => x.id === a.id ? { ...x, status } : x) }));
+    if (a.mobile === this.state.memMe) this.flash('memBanner', status === 'ack' ? 'Security has seen your alert and is responding.' : 'Security marked your alert as resolved.');
+    if (status === 'resolved') this.log('alert', a.name, a.unit, a.type + ' · resolved');
+  }
+  updUnit(id, patch) { this.setState(s => ({ units: s.units.map(u => u.id === id ? { ...u, ...patch } : u) })); }
+  admSheet() {
+    const s = this.state, e = s.admE || {};
+    const add = e.mode === 'add', edit = e.mode === 'edit';
+    const ex = add && e.unit.trim() ? this.unit(e.unit.trim().toUpperCase()) : null;
+    const field = k => ev => { const v = /obile/.test(k) ? digits(ev.target.value, 10) : ev.target.value; this.setState(st => ({ admE: { ...st.admE, [k]: v } })); };
+    let warn = '';
+    if (ex && e.role === 'Owner') warn = `This replaces the current owner, ${ex.owner.name}.`;
+    if (ex && e.role === 'Tenant' && ex.tenant) warn = `This replaces the current tenant, ${ex.tenant.name}.`;
+    const tOk = (!e.tName || !e.tName.trim()) && !e.tMobile || (e.tName && e.tName.trim() && e.tMobile && e.tMobile.length === 10);
+    return {
+      admSheetOpen: !!s.admE, admIsAdd: add, admIsEdit: edit, admE: e,
+      admSheetTitle: add ? 'Add member' : 'Edit ' + e.unit,
+      admOn: { unit: field('unit'), name: field('name'), mobile: field('mobile'), oName: field('oName'), oMobile: field('oMobile'), tName: field('tName'), tMobile: field('tMobile') },
+      admUnitHint: add && e.unit.trim() ? (ex ? `Existing ${ex.type.toLowerCase()} · owner ${ex.owner.name}${ex.tenant ? ', tenant ' + ex.tenant.name : ''}` : 'New unit. It will be added to the directory.') : '',
+      admShowType: add && !!e.unit.trim() && !ex, admShowRole: !!ex,
+      admTypes: ['Flat', 'Office'].map(t => ({ label: t, on: e.type === t, pick: () => this.setState(st => ({ admE: { ...st.admE, type: t } })) })),
+      admRoles: ['Owner', 'Tenant'].map(r => ({ label: r, on: e.role === r, pick: () => this.setState(st => ({ admE: { ...st.admE, role: r } })) })),
+      admWarn: warn,
+      admCantSave: add ? (!e.unit.trim() || !e.name.trim() || e.mobile.length !== 10) : edit ? (!e.oName.trim() || e.oMobile.length !== 10 || !tOk) : true,
+      admSaveLabel: add ? 'Add member' : 'Save changes',
+      admSave: () => this.admSave(), admCancel: () => this.setState({ admE: null }), admToast: s.admToast
+    };
+  }
+  togView(on) { return { track: on ? 'var(--color-text)' : 'transparent', knob: on ? 'var(--color-bg)' : 'var(--color-text)', x: on ? '24px' : '3px' }; }
+  log(kind, name, flat, detail) {
+    this.setState(s => ({ events: [{ id: 'e' + Date.now() + Math.random(), date: TODAY, time: now(), kind, name, flat, detail: detail || '' }, ...s.events] }));
+  }
+  openExt(name, mobile, purpose, code) { this.setState({ memExt: { name, mobile, purpose, code }, memExtDur: '3 days', memExtDate: dayIso(3) }); }
+  extUntil() { const s = this.state; return s.memExtDur === 'Custom' ? s.memExtDate : dayIso({ '1 day': 1, '3 days': 3, '1 week': 7 }[s.memExtDur]); }
+  confirmExt() {
+    const s = this.state, e = s.memExt, until = this.extUntil(), valid = 'Valid until ' + fmtD(until);
+    let code = e.code, passes;
+    if (code) passes = s.passes.map(p => p.code === code ? { ...p, valid, used: false, sent: p.sent || s.share } : p);
+    else { code = rnd(6); passes = [{ code, name: e.name, mobile: e.mobile, flat: this.state.memUnit, purpose: e.purpose, date: 'Today', valid, sent: s.share, used: false }, ...s.passes]; }
+    this.setState({ passes, memExt: null });
+    this.log('extend', e.name, this.state.memUnit, 'Until ' + fmtD(until));
+    this.flash('memBanner', `Approval for ${e.name} extended until ${fmtD(until)}.`);
+    if (s.share) this.sms(`${this.state.society.name}: ${this.state.memUnit} extended your approval until ${fmtD(until)}. Entry code ${code}. Open your pass:`, e.mobile, code);
+  }
+  activity(pre, flat, withFlat) {
+    const s = this.state, range = s[pre + 'Range'];
+    let from = TODAY, to = TODAY;
+    if (range === '7 days') from = dayIso(-6); else if (range === '30 days') from = dayIso(-29); else if (range === 'Custom') { from = s[pre + 'From']; to = s[pre + 'To']; }
+    if (from > to) [from, to] = [to, from];
+    const evs = s.events.filter(e => (!flat || e.flat === flat) && e.date >= from && e.date <= to).sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+    const days = [];
+    evs.forEach(e => {
+      let d = days[days.length - 1];
+      if (!d || d.date !== e.date) days.push(d = { date: e.date, label: e.date === TODAY ? 'Today · ' + fmtD(e.date) : fmtD(e.date), items: [] });
+      const [label, icon, color] = KIND[e.kind];
+      d.items.push({ ...e, icon, color, sub: [withFlat ? e.flat : '', label, e.detail].filter(Boolean).join(' · ') });
+    });
+    return {
+      [pre + 'Ranges']: ['Today', '7 days', '30 days', 'Custom'].map(r => ({ label: r, on: range === r, pick: () => this.setState({ [pre + 'Range']: r }) })),
+      [pre + 'IsCustom']: range === 'Custom', [pre + 'From']: s[pre + 'From'], [pre + 'To']: s[pre + 'To'],
+      ['on' + pre + 'From']: e => this.setState({ [pre + 'From']: e.target.value }), ['on' + pre + 'To']: e => this.setState({ [pre + 'To']: e.target.value }),
+      [pre + 'Summary']: `${evs.length} ${evs.length === 1 ? 'activity' : 'activities'} · ${from === to ? fmtD(from) : fmtD(from) + ' – ' + fmtD(to)}`,
+      [pre + 'Empty']: !evs.length, [pre + 'Days']: days
+    };
+  }
+  componentWillUnmount() { Object.values(this.timers).forEach(clearTimeout); }
+  flash(key, text) {
+    this.setState({ [key]: text });
+    clearTimeout(this.timers[key]);
+    this.timers[key] = setTimeout(() => this.setState({ [key]: null }), 5000);
+  }
+  sms(text, mobile, code) {
+    if (mobile !== this.state.visMobile) return;
+    this.setState(s => ({ visMsgs: [...s.visMsgs, { text, time: now(), code }] }));
+    this.flash('visSms', text);
+  }
+  smsPass(p) { this.sms(`${this.state.society.name}: ${p.flat} has invited you (${p.date.toLowerCase()}). Entry code ${p.code}. Open your pass:`, p.mobile, p.code); }
+  updateVisit(id, status) {
+    const v = this.state.visits.find(x => x.id === id);
+    this.setState({ visits: this.state.visits.map(x => x.id === id ? { ...x, status } : x) });
+    return v;
+  }
+  decide(id, status) {
+    const v = this.updateVisit(id, status);
+    this.log(status, v.name, v.flat);
+    this.flash('secToast', `${v.name} ${status === 'approved' ? 'approved' : 'denied'} by ${v.flat}`);
+    this.sms(status === 'approved' ? `${this.state.society.name}: ${v.flat} approved your visit. Security will let you in.` : `${this.state.society.name}: ${v.flat} could not approve your visit.`, v.mobile);
+  }
+  verify(code) {
+    const p = this.state.passes.find(x => x.code === code);
+    const res = !p ? { ok: false, msg: 'No pass matches this code.' } : p.used ? { ok: false, msg: `Code already used by ${p.name}.` } : { ok: true, pass: p };
+    this.setState({ secCode: code, secRes: res });
+  }
+  pressKey(k) {
+    let c = this.state.secCode;
+    if (k === 'Clear') c = ''; else if (k === 'Del') c = c.slice(0, -1); else if (c.length < 6) c += k;
+    this.setState({ secCode: c, secRes: null });
+    if (c.length === 6 && k !== 'Del' && k !== 'Clear') this.verify(c);
+  }
+  tabs(list, cur, key) {
+    return list.map(([id, label]) => ({
+      label, icon: ICON[id] || ICON[key] || '', bd: id === cur ? 'var(--color-text)' : 'transparent',
+      fg: id === cur ? 'var(--color-text)' : 'color-mix(in srgb, var(--color-text) 55%, transparent)',
+      pick: () => this.setState({ [key]: id })
+    }));
+  }
+  chips(cur, key) {
+    return PURPOSES.map(label => {
+      const on = label === cur;
+      return { label, icon: ICON[label], bg: on ? 'var(--color-text)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)', bd: on ? 'var(--color-text)' : 'var(--color-divider)', pick: () => this.setState({ [key]: label }) };
+    });
+  }
+  view(v) {
+    const [statusLabel, tagClass] = STATUS[v.status];
+    return {
+      ...v, statusLabel, tagClass, mobileFmt: fmt(v.mobile), hasPhoto: !!v.photo, noPhoto: !v.photo,
+      initials: v.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+      sub: `${v.flat} · ${v.purpose} · ${v.via} · ${v.time}`,
+      canAllow: v.status === 'approved', canExit: v.status === 'inside',
+      visitorNote: { pending: `Waiting for ${v.flat} to approve.`, approved: 'Approved. Security will let you in.', denied: 'The resident did not approve this visit.', inside: 'You are checked in.', exited: 'Visit closed.' }[v.status],
+      allow: () => { this.updateVisit(v.id, 'inside'); this.log('entry', v.name, v.flat, `${v.via} · ${v.purpose}`); this.flash('secToast', `${v.name} checked in`); },
+      exit: () => { this.updateVisit(v.id, 'exited'); this.log('exit', v.name, v.flat); },
+      canExtend: v.flat === this.state.memUnit && ['approved', 'inside', 'exited'].includes(v.status),
+      extend: () => { const p = this.state.passes.find(x => x.mobile === v.mobile && x.flat === this.state.memUnit); this.openExt(v.name, v.mobile, v.purpose, p && p.code); },
+      approve: () => this.decide(v.id, 'approved'),
+      deny: () => this.decide(v.id, 'denied')
+    };
+  }
+  passView(p) {
+    return { ...p, extend: () => this.openExt(p.name, p.mobile, p.purpose, p.code), qr: qrPath(p.code), qrOpacity: p.used ? 0.3 : 1, statusLabel: p.used ? 'Used' : p.sent ? 'Active' : 'Not shared', tagClass: p.used ? 'tag tag-neutral' : p.sent ? 'tag tag-accent' : 'tag tag-outline' };
+  }
+  renderVals() {
+    const s = this.state;
+    const set = (k, n) => e => this.setState({ [k]: n ? digits(e.target.value, n) : e.target.value });
+    const visitsView = s.visits.map(v => this.view(v));
+    const titles = { home: 'Main gate', entry: 'New visitor', verify: 'Verify pass', log: "Today's visitors" };
+    const secOtpRequired = s.otp && !s.secVerified;
+    const pending = visitsView.filter(v => v.status === 'pending' && this.mine(v.flat));
+    const q = s.secFlat.trim().toLowerCase();
+    const secUnit = s.units.find(u => u.id.toLowerCase() === q);
+    const who = id => this.recips(id).map(r => r.name + ' (' + r.role + ')').join(' and ');
+    const secSuggest = q && !secUnit ? s.units.filter(u => [u.id, u.owner.name, u.tenant && u.tenant.name].some(x => x && x.toLowerCase().includes(q))).slice(0, 4).map(u => ({ id: u.id, type: u.type, who: 'Notifies ' + who(u.id), pick: () => this.setState({ secFlat: u.id }) })) : [];
+    const myUnits = s.units.filter(u => u.owner.mobile === s.memMe || (u.tenant && u.tenant.mobile === s.memMe));
+    const ownerName = (s.units.find(u => u.owner.mobile === s.memOwner) || { owner: { name: 'Owner' } }).owner.name;
+    const accounts = [{ mobile: s.memOwner, name: ownerName, label: ownerName.split(' ')[0] + ' · owner' }, ...s.units.filter(u => u.owner.mobile === s.memOwner && u.tenant).map(u => ({ mobile: u.tenant.mobile, name: u.tenant.name, label: u.tenant.name.split(' ')[0] + ' · tenant ' + u.id }))];
+    const meAcc = accounts.find(a => a.mobile === s.memMe) || accounts[0];
+    const pendReq = (unit, kind) => s.tenantReqs.find(r => r.unit === unit && r.kind === kind && r.status === 'pending');
+    const aq = s.admQuery.trim().toLowerCase();
+    const admUnits = s.units.filter(u => !aq || [u.id, u.owner.name, u.owner.mobile, u.tenant && u.tenant.name, u.tenant && u.tenant.mobile].some(x => x && x.toLowerCase().includes(aq)));
+    const gen = s.memGen && s.passes.find(p => p.code === s.memGen);
+    const vp = s.visOpen && s.passes.find(p => p.code === s.visOpen);
+    return {
+      reset: () => { Object.values(this.timers).forEach(clearTimeout); this.setState(this.initial()); },
+      visitsView,
+      // visitor
+      visMobileFmt: fmt(s.visMobile), visSms: s.visSms,
+      visOnList: !vp, visOnPass: !!vp,
+      visMsgs: s.visMsgs.map(m => ({ ...m, hasLink: !!m.code, url: m.code ? 'gatepass.in/p/' + m.code : '', open: () => this.setState({ visOpen: m.code }) })),
+      visBack: () => this.setState({ visOpen: null }),
+      visPassUrl: vp ? 'gatepass.in/p/' + vp.code : '', visPassName: vp && vp.name, visPassCode: vp && vp.code, visPassQr: vp ? qrPath(vp.code) : '',
+      visPassQrOpacity: vp && vp.used ? 0.3 : 1, visPassFlat: vp && vp.flat, visPassPurpose: vp && vp.purpose, visPassValid: vp && vp.valid,
+      visPassStatus: vp && (vp.used ? 'Used' : 'Valid'), visPassTag: vp && vp.used ? 'tag tag-neutral' : 'tag tag-accent',
+      // security
+      secIsHome: s.secTab === 'home', secGoEntry: () => this.setState({ secTab: 'entry' }), secGoVerify: () => this.setState({ secTab: 'verify' }),
+      secCountInside: s.visits.filter(v => v.status === 'inside').length, secCountWaiting: s.visits.filter(v => ['pending', 'approved'].includes(v.status)).length, secCountToday: s.visits.length,
+      secWaiting: visitsView.filter(v => ['pending', 'approved'].includes(v.status)).map(v => ({ ...v, isPending: v.status === 'pending', isDenied: false })), secNoWaiting: !s.visits.some(v => ['pending', 'approved'].includes(v.status)),
+      secInside: visitsView.filter(v => v.status === 'inside'), secNoInside: !s.visits.some(v => v.status === 'inside'),
+      secTitle: titles[s.secTab], secIsEntry: s.secTab === 'entry', secIsVerify: s.secTab === 'verify', secIsLog: s.secTab === 'log',
+      secTabs: this.tabs([['home', 'Home'], ['entry', 'New entry'], ['verify', 'Verify'], ['log', 'Log']], s.secTab, 'secTab'),
+      secName: s.secName, secMobile: s.secMobile, secFlat: s.secFlat, secPhoto: s.secPhoto, secOtpIn: s.secOtpIn,
+      secHasPhoto: !!s.secPhoto, secNoPhoto: !s.secPhoto,
+      onSecName: set('secName'), onSecFlat: e => this.setState({ secFlat: e.target.value }), onSecOtpIn: set('secOtpIn', 4),
+      onSecMobile: e => this.setState({ secMobile: digits(e.target.value, 10), secVerified: false, secOtpSent: '' }),
+      onSecPhoto: e => { const f = e.target.files && e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => this.setState({ secPhoto: r.result }); r.readAsDataURL(f); },
+      secShowSendOtp: s.otp && !s.secVerified, secCantSendOtp: s.secMobile.length !== 10,
+      secSendLabel: s.secOtpSent ? 'Resend' : 'Send OTP',
+      secSendOtp: () => { const o = rnd(4); this.setState({ secOtpSent: o, secOtpIn: '' }); this.sms(`${o} is your ${this.state.society.name} gate OTP. Share it with security.`, s.secMobile); },
+      secShowOtpInput: s.otp && !!s.secOtpSent && !s.secVerified, secVerified: s.otp && s.secVerified,
+      secVerifyOtp: () => s.secOtpIn === s.secOtpSent ? this.setState({ secVerified: true }) : this.flash('secToast', 'Incorrect OTP. Ask the visitor to check the SMS.'),
+      secOtpRequired,
+      secChips: this.chips(s.secPurpose, 'secPurpose'),
+      secCantSubmit: !s.secName.trim() || s.secMobile.length !== 10 || !secUnit || !s.secPurpose || secOtpRequired,
+      secSubmit: () => {
+        const v = { id: s.nextId, name: s.secName.trim(), mobile: s.secMobile, flat: secUnit.id, purpose: s.secPurpose, photo: s.secPhoto, status: 'pending', time: now(), via: 'Walk-in' };
+        this.setState({ visits: [v, ...s.visits], nextId: s.nextId + 1, secName: '', secMobile: '', secFlat: '', secPurpose: '', secPhoto: null, secOtpSent: '', secOtpIn: '', secVerified: false });
+        this.flash('secToast', `Sent to ${who(v.flat)} for approval`);
+        this.log('request', v.name, v.flat, `Walk-in · ${v.purpose}`);
+        if (this.mine(v.flat)) this.flash('memBanner', `${v.name} is at the gate for ${v.flat} · ${v.purpose}. Tap to approve.`);
+      },
+      secDigits: Array.from({ length: 6 }, (_, i) => ({ v: s.secCode[i] || '' })),
+      secKeys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'Clear', '0', 'Del'].map(k => ({ label: k, isDel: k === 'Del', isText: k !== 'Del', press: () => this.pressKey(k) })),
+      secScan: () => { const p = s.passes.find(x => !x.used && x.sent); p ? this.verify(p.code) : this.setState({ secCode: '', secRes: { ok: false, msg: 'No valid pass detected.' } }); },
+      secResOk: !!(s.secRes && s.secRes.ok), secResBad: !!(s.secRes && !s.secRes.ok), secResMsg: s.secRes && s.secRes.msg,
+      secResName: s.secRes && s.secRes.pass && s.secRes.pass.name, secResFlat: s.secRes && s.secRes.pass && s.secRes.pass.flat,
+      secResDetail: s.secRes && s.secRes.pass && `${s.secRes.pass.purpose} · ${fmt(s.secRes.pass.mobile)} · ${s.secRes.pass.valid}`,
+      secAdmit: () => {
+        const p = s.secRes.pass;
+        const v = { id: s.nextId, name: p.name, mobile: p.mobile, flat: p.flat, purpose: p.purpose, photo: null, status: 'inside', time: now(), via: 'Pass' };
+        this.setState({ visits: [v, ...s.visits], nextId: s.nextId + 1, passes: s.passes.map(x => x.code === p.code ? { ...x, used: true } : x), secCode: '', secRes: null });
+        this.flash('secToast', `${p.name} allowed into ${p.flat}`);
+        this.log('entry', p.name, p.flat, `Pass · ${p.purpose}`);
+        if (this.mine(p.flat)) this.flash('memBanner', `${p.name} has entered with your pass.`);
+      },
+      secToast: s.secToast,
+      secSuggest, secSuggestOpen: secSuggest.length > 0, secUnitFound: !!secUnit, secUnitMissing: !!q && !secUnit && !secSuggest.length,
+      secUnitWho: secUnit ? this.recips(secUnit.id).map(r => ({ name: r.name, role: r.role, phone: fmt(r.mobile) })) : [],
+      memUnit: s.memUnit, memIsUnits: s.memTab === 'units',
+      memMeName: meAcc.name,
+      socName: s.society.name, socLogo: s.society.logo, socHasLogo: !!s.society.logo, socNoLogo: !s.society.logo,
+      socInitials: s.society.name.split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+      onSocName: e => this.setState({ society: { ...s.society, name: e.target.value } }),
+      onSocLogo: e => { const f = e.target.files && e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => this.setState(st => ({ society: { ...st.society, logo: r.result } })); r.readAsDataURL(f); },
+      socRemoveLogo: () => this.setState({ society: { ...s.society, logo: null } }),
+      gatePhone: s.gatePhone, supName: s.supName, supPhone: s.supPhone, gatePhoneFmt: fmt(s.gatePhone), gateTel: 'tel:+91' + s.gatePhone,
+      onGatePhone: set('gatePhone', 10), onSupName: set('supName'), onSupPhone: set('supPhone', 10),
+      secContacts: [{ label: 'Main gate · 24×7', name: 'Gate desk', phone: fmt(s.gatePhone), tel: 'tel:+91' + s.gatePhone }, { label: 'Security supervisor', name: s.supName, phone: fmt(s.supPhone), tel: 'tel:+91' + s.supPhone }],
+      memAlertOpen: s.memAlertOpen, memOpenAlert: () => this.setState({ memAlertOpen: true }), memCloseAlert: () => this.setState({ memAlertOpen: false }),
+      memAlertTypes: ['Medical emergency', 'Suspicious person', 'Need help at home', 'Fire or smoke', 'Lift stuck', 'Other'].map(label => { const on = s.memAlertType === label; return { label, bg: on ? 'var(--color-text)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)', bd: on ? 'var(--color-text)' : 'var(--color-divider)', pick: () => this.setState({ memAlertType: label }) }; }),
+      memAlertNote: s.memAlertNote, onMemAlertNote: set('memAlertNote'), memAlertCant: !s.memAlertType, memSendAlert: () => this.sendAlert(),
+      memAlerts: s.alerts.filter(a => a.mobile === s.memMe && a.status !== 'resolved').map(a => ({ ...a, statusLabel: a.status === 'new' ? 'Sent · waiting for security' : 'Security is responding' })),
+      secOpenAlerts: s.alerts.filter(a => a.status !== 'resolved').map(a => ({ ...a, phoneFmt: fmt(a.mobile), tel: 'tel:+91' + a.mobile, hasNote: !!a.note, isNew: a.status === 'new', isAck: a.status === 'ack', statusLabel: a.status === 'new' ? 'New' : 'Responding', ack: () => this.setAlert(a, 'ack'), resolve: () => this.setAlert(a, 'resolved') })),
+      secAlertStrip: s.secTab !== 'home' && s.alerts.some(a => a.status !== 'resolved'),
+      secAlertCountLabel: (n => n + (n === 1 ? ' open resident alert' : ' open resident alerts'))(s.alerts.filter(a => a.status !== 'resolved').length),
+      secAlert: s.secAlert, secGoHome: () => this.setState({ secTab: 'home', secAlert: null }), memMeMobileFmt: fmt(s.memMe),
+      memProf: s.memProf || {}, memProfView: !s.memProf, memProfEditing: !!s.memProf,
+      memProfEdit: () => this.setState({ memProf: { name: meAcc.name, mobile: s.memMe, otp: '', otpIn: '', err: '' } }),
+      memProfOn: { name: e => this.setState({ memProf: { ...s.memProf, name: e.target.value } }), mobile: e => this.setState({ memProf: { ...s.memProf, mobile: digits(e.target.value, 10), otp: '', otpIn: '', err: '' } }), otpIn: e => this.setState({ memProf: { ...s.memProf, otpIn: digits(e.target.value, 4), err: '' } }) },
+      memProfOtpStep: !!(s.memProf && s.memProf.otp), memProfErr: s.memProf && s.memProf.err,
+      memProfSaveLabel: s.memProf && s.memProf.mobile !== s.memMe ? (s.memProf.otp ? 'Verify and save' : 'Send OTP') : 'Save',
+      memProfCantSave: !s.memProf || !s.memProf.name.trim() || s.memProf.mobile.length !== 10 || (!!s.memProf.otp && s.memProf.otpIn.length !== 4),
+      memProfSave: () => this.memProfSave(), memProfCancel: () => this.setState({ memProf: null }),
+      ...this.admSheet(),
+      memAccounts: accounts.map(a => ({ label: a.label, on: a.mobile === s.memMe, pick: () => { const first = s.units.find(u => u.owner.mobile === a.mobile || (u.tenant && u.tenant.mobile === a.mobile)); this.setState({ memMe: a.mobile, memUnit: first ? first.id : s.memUnit, memTab: 'approvals', memGen: null, memAddFor: null }); } })),
+      memUnitTabs: myUnits.map(u => ({ id: u.id, role: u.owner.mobile !== s.memMe ? 'Tenant' : u.tenant ? 'Rented · ' + u.tenant.name : 'Home', bd: u.id === s.memUnit ? 'var(--color-text)' : 'transparent', fg: u.id === s.memUnit ? 'var(--color-text)' : 'color-mix(in srgb, var(--color-text) 55%, transparent)', pick: () => this.setState({ memUnit: u.id, memGen: null }) })),
+      memUnitCards: myUnits.map(u => ({
+        id: u.id, statusTag: u.tenant ? 'Rented out' : 'Self-occupied', tagClass: u.tenant ? 'tag tag-outline' : 'tag tag-neutral',
+        ownerLine: u.owner.name + (u.owner.mobile === s.memMe ? ' (you)' : '') + ' · ' + fmt(u.owner.mobile),
+        isOwner: u.owner.mobile === s.memMe, isTenantView: u.owner.mobile !== s.memMe,
+        canReqRemove: u.owner.mobile === s.memMe && !pendReq(u.id, 'remove'), removePending: !!pendReq(u.id, 'remove'),
+        reqRemove: () => { this.addReq({ unit: u.id, kind: 'remove', name: u.tenant.name, mobile: u.tenant.mobile, owner: u.owner.name }); this.flash('memBanner', `Request sent to admin to remove ${u.tenant.name} from ${u.id}.`); },
+        addPending: !!pendReq(u.id, 'add'), pendingLine: pendReq(u.id, 'add') ? pendReq(u.id, 'add').name + ' · ' + fmt(pendReq(u.id, 'add').mobile) : '',
+        cancelReq: () => this.setState({ tenantReqs: s.tenantReqs.filter(r => !(r.unit === u.id && r.kind === 'add' && r.status === 'pending')) }),
+        hasTenant: !!u.tenant, tenantLine: u.tenant ? u.tenant.name + (u.tenant.mobile === s.memMe ? ' (you)' : '') + ' · ' + fmt(u.tenant.mobile) : '',
+        div: this.togView(u.divert), toggleDivert: () => this.updUnit(u.id, { divert: !u.divert }),
+        showCc: !!u.tenant && u.divert, cc: this.togView(u.cc), toggleCc: () => this.updUnit(u.id, { cc: !u.cc }),
+        removeTenant: () => this.updUnit(u.id, { tenant: null, divert: false, cc: false }),
+        goesTo: who(u.id),
+        isAdding: s.memAddFor === u.id, canAdd: u.owner.mobile === s.memMe && !u.tenant && s.memAddFor !== u.id && !pendReq(u.id, 'add'),
+        startAdd: () => this.setState({ memAddFor: u.id, memTName: '', memTMobile: '' }),
+        tName: s.memTName, tMobile: s.memTMobile, onTName: set('memTName'), onTMobile: set('memTMobile', 10),
+        cantSave: !s.memTName.trim() || s.memTMobile.length !== 10,
+        save: () => { this.addReq({ unit: u.id, kind: 'add', name: s.memTName.trim(), mobile: s.memTMobile, owner: u.owner.name }); this.setState({ memAddFor: null }); this.flash('memBanner', `Request sent to admin to add ${s.memTName.trim()} to ${u.id}.`); },
+        cancel: () => this.setState({ memAddFor: null })
+      })),
+      admReqs: s.tenantReqs.filter(r => r.status === 'pending').map(r => ({ title: r.kind === 'add' ? 'Add tenant' : 'Remove tenant', unit: r.unit, person: r.name + ' · ' + fmt(r.mobile), by: 'Requested by ' + r.owner + ' (owner) · ' + r.time, approve: () => this.resolveReq(r, true), reject: () => this.resolveReq(r, false) })),
+      admHasReqs: s.tenantReqs.some(r => r.status === 'pending'),
+      admIsDir: s.admTab === 'dir', admQuery: s.admQuery, onAdmQuery: set('admQuery'),
+      admUnitCount: admUnits.length + (admUnits.length === 1 ? ' unit' : ' units'),
+      admStartAdd: () => this.setState({ admE: { mode: 'add', unit: '', type: 'Flat', role: 'Owner', name: '', mobile: '' } }),
+      admUnits: admUnits.map(u => ({ id: u.id, type: u.type, edit: () => this.setState({ admE: { mode: 'edit', unit: u.id, oName: u.owner.name, oMobile: u.owner.mobile, tName: u.tenant ? u.tenant.name : '', tMobile: u.tenant ? u.tenant.mobile : '' } }), owner: u.owner.name + ' · ' + fmt(u.owner.mobile), tenant: u.tenant ? u.tenant.name + ' · ' + fmt(u.tenant.mobile) : '—', goesTo: who(u.id) })),
+      // member
+      memTitle: { approvals: 'Visitors', pre: 'Pre-approve', activity: 'Activity', units: 'My units' }[s.memTab],
+      memIsActivity: s.memTab === 'activity', ...this.activity('mem', this.state.memUnit, false), ...this.activity('adm', null, true), today: TODAY,
+      memExtOpen: !!s.memExt, memExtName: s.memExt && s.memExt.name, memExtSub: s.memExt && `${s.memExt.purpose} · ${fmt(s.memExt.mobile)}`,
+      memExtDurs: ['1 day', '3 days', '1 week', 'Custom'].map(d => ({ label: d, on: s.memExtDur === d, pick: () => this.setState({ memExtDur: d }) })),
+      memExtIsCustom: s.memExtDur === 'Custom', memExtDate: s.memExtDate, onMemExtDate: e => this.setState({ memExtDate: e.target.value }),
+      memExtUntil: s.memExt ? fmtD(this.extUntil()) : '', memExtCancel: () => this.setState({ memExt: null }), memExtConfirm: () => this.confirmExt(),
+      memTabs: this.tabs([['approvals', pending.length ? `Requests ${pending.length}` : 'Requests'], ['pre', 'Invite'], ['activity', 'Activity'], ['units', 'Units']], s.memTab, 'memTab'),
+      memIsApprovals: s.memTab === 'approvals', memGoApprovals: () => this.setState({ memTab: 'approvals' }), memIsPre: s.memTab === 'pre',
+      memPending: pending, memNoPending: !pending.length,
+      memHistory: visitsView.filter(v => v.flat === this.state.memUnit && v.status !== 'pending'),
+      memName: s.memName, memMobile: s.memMobile, onMemName: set('memName'), onMemMobile: set('memMobile', 10),
+      memChips: this.chips(s.memPurpose, 'memPurpose'),
+      memDates: ['Today', 'Tomorrow'].map(d => ({ label: d, on: s.memDate === d, pick: () => this.setState({ memDate: d }) })),
+      memCantGen: !s.memName.trim() || s.memMobile.length !== 10,
+      memGenerate: () => {
+        const p = { code: rnd(6), name: s.memName.trim(), mobile: s.memMobile, flat: this.state.memUnit, purpose: s.memPurpose, date: s.memDate, valid: `${s.memDate} · valid ${s.validity}`, sent: s.share, used: false };
+        this.setState({ passes: [p, ...s.passes], memGen: p.code, memName: '', memMobile: '' });
+        if (p.sent) this.smsPass(p);
+        this.log('pass', p.name, this.state.memUnit, `${p.purpose} · ${p.date}`);
+      },
+      memHasGen: !!gen, memNoGen: !gen,
+      memGenCode: gen && gen.code, memGenQr: gen ? qrPath(gen.code) : '', memGenFor: gen && gen.name, memGenValid: gen && gen.valid,
+      memGenMobile: gen && fmt(gen.mobile), memGenSent: !!(gen && gen.sent), memGenNotSent: !!(gen && !gen.sent),
+      memShare: () => { this.setState({ passes: s.passes.map(x => x.code === gen.code ? { ...x, sent: true } : x) }); this.smsPass(gen); },
+      memNew: () => this.setState({ memGen: null }),
+      memPasses: s.passes.filter(p => p.flat === this.state.memUnit).map(p => this.passView(p)),
+      memBanner: s.memBanner,
+      // admin
+      admTitle: { settings: 'Gate settings', dir: 'Unit directory', activity: 'All activity' }[s.admTab],
+      admTabs: this.tabs([['settings', 'Settings'], ['dir', s.tenantReqs.some(r => r.status === 'pending') ? 'Directory ' + s.tenantReqs.filter(r => r.status === 'pending').length : 'Directory'], ['activity', 'Activity']], s.admTab, 'admTab'),
+      admIsSettings: s.admTab === 'settings', admIsActivity: s.admTab === 'activity',
+      toggleOtp: () => this.setState({ otp: !s.otp, secVerified: false, secOtpSent: '' }),
+      toggleShare: () => this.setState({ share: !s.share }),
+      otpTrack: s.otp ? 'var(--color-text)' : 'transparent', otpKnob: s.otp ? 'var(--color-bg)' : 'var(--color-text)', otpKnobX: s.otp ? '24px' : '3px',
+      shareTrack: s.share ? 'var(--color-text)' : 'transparent', shareKnob: s.share ? 'var(--color-bg)' : 'var(--color-text)', shareKnobX: s.share ? '24px' : '3px',
+      validityOpts: ['4 hours', '24 hours', '3 days'].map(o => ({ label: o, on: s.validity === o, pick: () => this.setState({ validity: o }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gatepass Member Guide · Essbel CHS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 14mm 14mm 16mm; }
+  @page :first { margin: 0; }
+  :root {
+    --ink: #1e2140; --ink-2: #3b3f63; --ink-3: #5e6283; --hair: #e3e5f2; --tint: #f4f5fb;
+    --indigo: #4f46e5; --violet: #7c3aed; --indigo-bg: #eef0ff; --amber: #b45309; --amber-bg: #fff4e0;
+    --sky: #0369a1; --sky-bg: #e6f4fd; --ok: #2f7a55; --danger: #b4392f;
+    --brand: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; }
+  h1, h2, h3 { margin: 0; letter-spacing: -0.015em; }
+  p { margin: 0 0 6pt; }
+  strong { font-weight: 650; }
+
+  /* Cover */
+  .cover { height: 297mm; padding: 22mm 18mm 18mm; color: #fff; display: flex; flex-direction: column; position: relative; overflow: hidden;
+    background: radial-gradient(420px 420px at 88% 8%, rgba(255,255,255,.16), transparent 70%), radial-gradient(520px 520px at 0% 100%, rgba(56,189,248,.22), transparent 70%), linear-gradient(150deg, #4f46e5 0%, #6d3fe6 50%, #8b3fe8 100%);
+    page-break-after: always; }
+  .cover .brand { display: flex; align-items: center; gap: 12px; font-weight: 650; font-size: 13pt; }
+  .cover .brand .logo { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.95); display: grid; place-items: center; overflow: hidden; }
+  .cover .brand .logo img { width: 40px; height: 40px; object-fit: contain; }
+  .cover .kicker { margin-top: 30mm; text-transform: uppercase; letter-spacing: .14em; font-size: 9pt; font-weight: 600; opacity: .8; }
+  .cover h1 { font-size: 40pt; line-height: 1.02; letter-spacing: -0.03em; margin-top: 6pt; }
+  .cover .sub { font-size: 14pt; opacity: .9; margin-top: 10pt; max-width: 88mm; line-height: 1.4; }
+  .cover .quick { margin-top: auto; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); border-radius: 18px; padding: 14pt 16pt; }
+  .cover .quick h3 { font-size: 12pt; margin-bottom: 8pt; }
+  .cover .quick ol { margin: 0; padding-left: 16pt; font-size: 11pt; }
+  .cover .quick li { margin: 3pt 0; }
+  .cover .phones { position: absolute; right: 12mm; top: 96mm; display: flex; gap: 10px; transform: rotate(-4deg); }
+  .cover .phones img { width: 46mm; border-radius: 16px; box-shadow: 0 18px 40px rgba(20,10,80,.45); border: 3px solid rgba(255,255,255,.9); }
+  .cover .phones img:last-child { margin-top: 18mm; }
+  .cover .foot { margin-top: 10pt; font-size: 9pt; opacity: .75; }
+
+  /* Sections */
+  .section { break-inside: avoid; margin-bottom: 7mm; }
+  .sec-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8pt; }
+  .num { width: 28px; height: 28px; border-radius: 9px; background: var(--brand); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 11pt; flex: none; }
+  .sec-head h2 { font-size: 16pt; }
+  .sec-head .tag { margin-left: auto; font-size: 8.5pt; font-weight: 600; padding: 2pt 8pt; border-radius: 99px; background: var(--indigo-bg); color: var(--indigo); }
+  .grid { display: grid; grid-template-columns: 1fr 52mm; gap: 8mm; align-items: start; }
+  .grid.two-shots { grid-template-columns: 1fr 50mm 50mm; gap: 6mm; }
+  .shot { width: 100%; border-radius: 14px; border: 1px solid var(--hair); box-shadow: 0 6px 18px rgba(30,20,90,.12); display: block; }
+  .shot.flat { border-radius: 12px; }
+  .cap { font-size: 8.5pt; color: var(--ink-3); text-align: center; margin-top: 4pt; }
+  ol.steps { margin: 0 0 8pt; padding: 0; list-style: none; counter-reset: s; }
+  ol.steps li { counter-increment: s; position: relative; padding-left: 26px; margin: 0 0 6pt; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 1pt; width: 18px; height: 18px; border-radius: 50%; background: var(--indigo-bg); color: var(--indigo); font-size: 8.5pt; font-weight: 700; display: grid; place-items: center; }
+  ul.bul { margin: 0 0 8pt; padding-left: 14pt; }
+  ul.bul li { margin: 0 0 3pt; }
+  .tip { border-radius: 12px; padding: 8pt 11pt; font-size: 9.5pt; margin: 6pt 0; background: var(--indigo-bg); color: #34308f; }
+  .tip.amber { background: var(--amber-bg); color: #7a3d06; }
+  .tip.sky { background: var(--sky-bg); color: #0b4a70; }
+  .tip.red { background: #fff; color: var(--danger); border: 1px solid #e5a39c; }
+  .tip b { font-weight: 700; }
+  .k { display: inline-block; padding: 0 6pt; border-radius: 6px; background: var(--tint); border: 1px solid var(--hair); font-weight: 600; font-size: 9.5pt; white-space: nowrap; }
+
+  /* Icon legend */
+  .legend { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8pt; margin: 4pt 0 10mm; }
+  .legend div { border: 1px solid var(--hair); border-radius: 12px; padding: 8pt 10pt; font-size: 9pt; color: var(--ink-3); }
+  .legend b { display: block; color: var(--ink); font-size: 10pt; margin-bottom: 1pt; }
+  .legend .ic { font-size: 14pt; display: block; margin-bottom: 2pt; }
+
+  .intro { font-size: 11pt; color: var(--ink-2); margin: 0 0 6mm; }
+  .page-title { font-size: 22pt; margin-bottom: 3pt; }
+  .page-kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 8.5pt; font-weight: 600; color: var(--violet); }
+
+  /* FAQ */
+  .faq { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt 10mm; }
+  .faq div { break-inside: avoid; }
+  .faq h3 { font-size: 10.5pt; margin-bottom: 2pt; color: var(--ink); }
+  .faq p { color: var(--ink-2); font-size: 9.5pt; }
+  .closing { margin-top: 8mm; border-radius: 16px; padding: 12pt 14pt; background: var(--brand); color: #fff; display: flex; align-items: center; gap: 12pt; break-inside: avoid; }
+  .closing b { font-size: 12pt; }
+  .closing span { opacity: .9; font-size: 10pt; }
+  .pb { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- ───────────── Cover ───────────── -->
+<section class="cover">
+  <div class="brand"><span class="logo"><img id="logo" alt=""></span> Essbel CHS</div>
+  <div class="kicker">Member guide · Owners & tenants</div>
+  <h1>Gatepass</h1>
+  <div class="sub">Approve visitors, invite guests and hear from the society office — all from your phone.</div>
+  <div class="phones">
+    <img src="img/03-requests.png" alt="">
+    <img src="img/10-notices.png" alt="">
+  </div>
+  <div class="quick">
+    <h3>Get started in a minute</h3>
+    <ol>
+      <li>Open the <strong>Gatepass link</strong> shared by the society office.</li>
+      <li>Enter the <strong>mobile number registered with the society</strong>.</li>
+      <li>Type the <strong>4-digit code</strong> you receive by SMS. That's it.</li>
+    </ol>
+  </div>
+  <div class="foot">No app store download needed. You stay signed in until you choose to sign out.</div>
+</section>
+
+<!-- ───────────── Page 2 ───────────── -->
+<div class="page-kicker">Your app at a glance</div>
+<h1 class="page-title">What's on your screen</h1>
+<p class="intro">Gatepass opens on <strong>Requests</strong>. If you own or rent more than one flat, tap the unit cards at the top (e.g. <span class="k">B-402</span> <span class="k">C-110</span>) to switch between them.</p>
+
+<div class="legend">
+  <div><span class="ic">📣</span><b>Notices</b>Messages from the society office</div>
+  <div><span class="ic">🛡️</span><b>Security</b>Call the gate or send an alert</div>
+  <div><span class="ic">🔔</span><b>Notifications</b>Your recent updates</div>
+  <div><span class="ic">👤</span><b>Account</b>Theme and sign out</div>
+</div>
+
+<section class="section">
+  <div class="sec-head"><span class="num">1</span><h2>Signing in</h2></div>
+  <div class="grid two-shots">
+    <div>
+      <ol class="steps">
+        <li>Open the Gatepass link from the society office on your phone.</li>
+        <li>Enter your 10-digit mobile number and tap <span class="k">Send code</span>.</li>
+        <li>Enter the 4-digit code from the SMS. Gatepass signs you in.</li>
+      </ol>
+      <div class="tip"><b>Add it to your home screen</b> so it opens like an app.<br>Android (Chrome): ⋮ menu → <b>Add to Home screen</b>. iPhone (Safari): Share → <b>Add to Home Screen</b>.</div>
+      <div class="tip sky">You stay signed in. To sign out, tap 👤 → <b>Sign out</b> (tap <b>Cancel</b> if you opened it by mistake).</div>
+      <div class="tip amber">Number not recognised? Ask the society office to add you. Only numbers in the society directory can sign in.</div>
+    </div>
+    <div><img class="shot" src="img/01-signin.png" alt=""><div class="cap">Enter your number</div></div>
+    <div><img class="shot" src="img/02-code.png" alt=""><div class="cap">Type the SMS code</div></div>
+  </div>
+</section>
+
+<!-- ───────────── Page 3 ───────────── -->
+<section class="section pb">
+  <div class="sec-head"><span class="num">2</span><h2>When a visitor is at the gate</h2><span class="tag">Requests tab</span></div>
+  <div class="grid">
+    <div>
+      <p>When security logs a walk-in for your flat, the visitor appears under <strong>Waiting at the gate</strong> with their name, purpose, phone number and a photo if security took one. If Gatepass is open, a pop-up tells you straight away.</p>
+      <ol class="steps">
+        <li>Tap <span class="k">Approve</span> to let them in, or <span class="k">Deny</span> if you aren't expecting them.</li>
+        <li>The visitor gets an SMS with your answer, and the guard sees it instantly.</li>
+        <li>Below, <strong>Today at your flat</strong> lists everyone who came today. Tap <span class="k">Extend</span> to let a regular visitor (maid, driver, relative) come back without asking again.</li>
+      </ol>
+      <div class="tip">Only one person needs to respond. If someone else at your flat already approved, you'll see it update.</div>
+    </div>
+    <div><img class="shot" src="img/03-requests.png" alt=""><div class="cap">A delivery waiting for approval</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="sec-head"><span class="num">3</span><h2>Need security? Call or alert</h2><span class="tag">🛡️ icon or Alert</span></div>
+  <div class="grid">
+    <div>
+      <ol class="steps">
+        <li>Tap <span class="k">Alert</span> on the Requests screen (or 🛡️ at the top).</li>
+        <li><strong>Call</strong> the main gate (24×7) or the security supervisor directly, <em>or</em></li>
+        <li>Pick an alert type — Medical emergency, Suspicious person, Need help at home, Fire or smoke, Lift stuck, Other — add a short note and tap <span class="k">Send alert</span>.</li>
+      </ol>
+      <p>The guard on duty sees your name, flat and phone number immediately. You'll get updates when security is <strong>responding</strong> and when it's <strong>resolved</strong>.</p>
+      <div class="tip red"><b>In a life-threatening emergency</b>, call 112 first, then alert the gate so they can guide help to your flat.</div>
+    </div>
+    <div><img class="shot" src="img/07-security.png" alt=""><div class="cap">Contact security</div></div>
+  </div>
+</section>
+
+<section class="section pb">
+  <div class="sec-head"><span class="num">4</span><h2>Invite a guest in advance</h2><span class="tag">Invite tab</span></div>
+  <div class="grid two-shots">
+    <div>
+      <p>Expecting someone? Pre-approve them so they walk straight in with a code.</p>
+      <ol class="steps">
+        <li>Enter the guest's <strong>name</strong> and <strong>mobile</strong>, and pick a purpose.</li>
+        <li>Choose <strong>Today</strong>, <strong>Tomorrow</strong> or <strong>Pick date</strong> (up to 3 days ahead).</li>
+        <li><em>Optional:</em> choose a <strong>time slot</strong> — Morning, Afternoon, Evening or your own times. The gate only accepts the pass during that window.</li>
+        <li>Tap <span class="k">Generate code and QR</span>. Your guest gets a 6-digit code and a QR pass by SMS; you can also <span class="k">Share</span> it on WhatsApp.</li>
+      </ol>
+      <div class="tip">At the gate, the guest shows the QR or tells the guard the code.</div>
+    </div>
+    <div><img class="shot flat" src="img/04-invite.png" alt=""><div class="cap">Date and optional time slot</div></div>
+    <div><img class="shot flat" src="img/05-pass.png" alt=""><div class="cap">Pass ready and sent by SMS</div></div>
+  </div>
+  <div class="grid" style="margin-top:6mm">
+    <div>
+      <h3 style="font-size:12pt;margin-bottom:4pt">Managing passes you've issued</h3>
+      <ul class="bul">
+        <li><strong>Extend</strong> — keep the same code working for more days (useful for house help or a visiting family member).</li>
+        <li><strong>Revoke</strong> — plans changed? The code stops working at the gate immediately, and the guest is told by SMS. You'll be asked to confirm first.</li>
+        <li>Tags show each pass's state: <span style="color:var(--ok);font-weight:600">Active</span>, <span style="color:var(--amber);font-weight:600">Scheduled</span>, Used, Expired or <span style="color:var(--danger);font-weight:600">Revoked</span>.</li>
+      </ul>
+    </div>
+    <div><img class="shot flat" src="img/06-passes.png" alt=""><div class="cap">Passes issued</div></div>
+  </div>
+</section>
+
+<!-- ───────────── Page 4 ───────────── -->
+<section class="section pb">
+  <div class="sec-head"><span class="num">5</span><h2>Notices from the society office</h2><span class="tag">📣 icon</span></div>
+  <div class="grid">
+    <div>
+      <p>Announcements such as water shutdowns, lift maintenance, meetings and drills appear on your notice board, with a pop-up if Gatepass is open. Some include a photo or PDF you can open.</p>
+      <ul class="bul">
+        <li><strong>Urgent</strong> notices are outlined in red and pinned on your home screen. Please tap <span class="k">I've read this</span> so the office knows you've seen it.</li>
+        <li><strong>Important</strong> notices stay pinned until you open them.</li>
+        <li>Tap 📣 at the top any time to see all current notices.</li>
+      </ul>
+      <div class="tip">Urgent notices may also come by SMS, so you're informed even when the app isn't open.</div>
+    </div>
+    <div><img class="shot" src="img/10-notices.png" alt=""><div class="cap">An urgent notice waiting for acknowledgement</div></div>
+  </div>
+</section>
+
+<!-- ───────────── Page 5 ───────────── -->
+<section class="section">
+  <div class="sec-head"><span class="num">6</span><h2>Your units, tenants and profile</h2><span class="tag">Units tab</span></div>
+  <div class="grid">
+    <div>
+      <p><strong>If you're an owner with a tenant</strong>, you decide who gets visitor requests:</p>
+      <ul class="bul">
+        <li><strong>Send visitor requests to tenant</strong> — your tenant approves their own visitors.</li>
+        <li><strong>Also notify me</strong> — you get the requests too.</li>
+        <li>The line <em>"Requests go to …"</em> always shows who will be asked.</li>
+      </ul>
+      <p><strong>Adding or removing a tenant:</strong> tap <span class="k">Request admin to add tenant</span> (or <span class="k">Request removal</span>). The society office verifies and approves; you'll be notified. Your tenant then signs in with their own number.</p>
+      <p><strong>If you're a tenant</strong>, the owner decides whether requests come to you.</p>
+      <p><strong>My profile:</strong> tap <span class="k">Edit</span> to change your name or mobile. A new number is confirmed with a code sent to that number, and it updates every flat you hold.</p>
+    </div>
+    <div><img class="shot flat" src="img/08-unit.png" alt=""><div class="cap">A rented flat's settings</div></div>
+  </div>
+</section>
+
+<!-- ───────────── Page 6 ───────────── -->
+<div class="pb"></div>
+<section class="section" style="margin-bottom:8mm">
+  <div class="sec-head"><span class="num">7</span><h2>Your visitor history</h2><span class="tag">Activity tab</span></div>
+  <p>See everything that happened at your flat: arrivals, exits, approvals, and passes issued, extended or revoked, grouped by day. Choose <strong>Today</strong>, <strong>7 days</strong>, <strong>30 days</strong> or a <strong>Custom</strong> range. You only ever see your own flats.</p>
+</section>
+<div class="page-kicker">Good to know</div>
+<h1 class="page-title" style="margin-bottom:6mm">Questions members ask</h1>
+<div class="faq">
+  <div><h3>I'm not getting visitor requests.</h3><p>Open <b>Units</b> and check "Requests go to". If your flat is rented, the owner may have sent requests to the tenant. Keep Gatepass open (or add it to your home screen) so pop-ups can reach you.</p></div>
+  <div><h3>My guest lost the code.</h3><p>Open <b>Invite → Passes issued</b> and use <b>Share</b> to send it again, or tell the guard the code yourself.</p></div>
+  <div><h3>I changed my phone number.</h3><p>Update it in <b>Units → My profile → Edit</b>. You'll confirm the new number with a code.</p></div>
+  <div><h3>A guest is coming every day this week.</h3><p>Create one pass and tap <b>Extend</b> to the last day. The same code works for repeat entries.</p></div>
+  <div><h3>Can I invite someone for a specific time?</h3><p>Yes — choose a time slot. The gate won't accept the pass outside that window.</p></div>
+  <div><h3>I invited someone by mistake.</h3><p>Tap <b>Revoke</b> on the pass. It stops working immediately and the guest is informed.</p></div>
+  <div><h3>Who can see my visitors?</h3><p>Only the residents of your flat, security at the gate, and the society office. Visitor photos are never shared outside the society.</p></div>
+  <div><h3>Can I use it on a computer?</h3><p>Yes. Open the same link in any browser and sign in with your mobile number.</p></div>
+</div>
+
+<div class="closing">
+  <div style="font-size:24pt">🏠</div>
+  <div><b>Need help with Gatepass?</b><br><span>Contact the Essbel CHS society office, or the main gate on +91 98000 12345 (24×7).</span></div>
+</div>
+
+<script>
+  // Society logo comes from the app's settings (embedded at build time).
+  document.getElementById('logo').src = window.SOCIETY_LOGO || '';
+</script>
+</body>
+</html>
